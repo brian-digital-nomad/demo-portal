@@ -2,160 +2,414 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BrandingTotaal – Stemmen Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>BrandingTotaal – Stemmen</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+    :root{
+      --bg:#0b1020;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#e8eefc;
+      --muted:rgba(232,238,252,.70);
+      --accent:#38bdf8;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 600px at 25% -10%, rgba(56,189,248,.18), transparent 60%),
+        radial-gradient(700px 500px at 85% 10%, rgba(34,197,94,.12), transparent 55%),
+        var(--bg);
+      color:var(--text);
     }
 
-    header {
-      padding: 16px;
-      text-align: center;
-      background: #020617;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background:rgba(0,0,0,.35);
+      border-bottom:1px solid var(--line);
+      padding:14px 12px;
+      text-align:center;
+    }
+    header a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+    header img{
+      width:clamp(140px, 52vw, 230px);
+      height:auto;
+      display:block;
+    }
+    .logoFail{
+      display:none;
+      margin-top:8px;
+      font-size:12px;
+      color:rgba(232,238,252,.55);
+      line-height:1.35;
     }
 
-    header img {
-      max-width: 160px;
-      height: auto;
+    main{
+      max-width:980px;
+      margin:0 auto;
+      padding:16px 12px 26px;
+    }
+    h1{margin:12px 0 6px;font-size:22px;letter-spacing:.2px}
+    .hint{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.35}
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
     }
 
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 16px;
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
     }
 
-    h1, h2 {
-      margin-top: 24px;
-      font-weight: 600;
+    /* Loading indicator */
+    .loadingWrap{
+      display:none;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .spinner{
+      width:14px;height:14px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.25);
+      border-top-color:var(--accent);
+      animation:spin .9s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Wave animation */
+    .wave{
+      width:92px;height:18px;
+      display:none;
+      align-items:flex-end;
+      gap:3px;
+    }
+    .bar{
+      width:6px;height:6px;
+      background:var(--accent);
+      border-radius:999px;
+      opacity:.9;
+      animation:bounce 1s ease-in-out infinite;
+    }
+    .bar:nth-child(2){animation-delay:.08s}
+    .bar:nth-child(3){animation-delay:.16s}
+    .bar:nth-child(4){animation-delay:.24s}
+    .bar:nth-child(5){animation-delay:.32s}
+    .bar:nth-child(6){animation-delay:.40s}
+    .bar:nth-child(7){animation-delay:.48s}
+    @keyframes bounce{
+      0%,100%{height:6px;opacity:.55}
+      50%{height:18px;opacity:1}
     }
 
-    .player {
-      margin: 16px 0;
-    }
+    audio{width:100%;margin-top:10px}
 
-    audio {
-      width: 100%;
-      margin-bottom: 12px;
+    .status{
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(0,0,0,.20);
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
     }
+    .status b{color:var(--text);font-weight:650}
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      margin-top:14px;
     }
+    @media(min-width:900px){ .grid{grid-template-columns:1fr 1fr} }
 
-    li {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      cursor: pointer;
+    h2{margin:0 0 10px;font-size:16px;color:rgba(232,238,252,.86)}
+
+    ul{
+      list-style:none;
+      padding:0;margin:0;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:rgba(0,0,0,.18);
     }
-
-    li:hover {
-      background: rgba(255,255,255,.05);
+    li{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
     }
+    li:last-child{border-bottom:none}
+    li:hover{background:rgba(255,255,255,.06)}
+    li.active{background:rgba(56,189,248,.14)}
+    .left{display:flex;align-items:center;gap:10px;min-width:0}
+    .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .dot.playing{background:var(--good)}
+    .dot.error{background:var(--bad)}
+    .tag{color:var(--muted);font-size:12px;flex:0 0 auto}
 
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 14px;
-      color: #94a3b8;
+    footer{
+      text-align:center;
+      padding:18px 12px 26px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .tiny{
+      font-size:12px;
+      color:rgba(232,238,252,.55);
+      margin-top:8px;
+      line-height:1.35;
     }
   </style>
 </head>
 
 <body>
+  <header>
+    <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">
+      <!-- NIEUWSTE LOGO: stabiele dl.dropboxusercontent.com + rlkey -->
+      <img
+        src="https://dl.dropboxusercontent.com/scl/fi/duhfszbna6gp47e27fim1/Branding-Totaal-logo-button-mouse-2025-white-text-R.png?rlkey=qqfgg0ehi63hvy4p3ioisjg9t"
+        alt="BrandingTotaal logo"
+        onerror="this.style.display='none'; document.getElementById('logoFail').style.display='block';"
+      />
+    </a>
+    <div id="logoFail" class="logoFail">
+      Logo kan niet laden. Meestal betekent dit: Dropbox-link heeft wachtwoord of is niet “Iedereen met de link”.
+    </div>
+  </header>
 
-<header>
-  <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">
-    <img src="https://www.dropbox.com/scl/fi/a96h1qrs7yzbc8cin9czg/icon-BrandingTotaal-logo-2025.jpg?raw=1"
-         alt="BrandingTotaal logo">
-  </a>
-</header>
+  <main>
+    <h1>Kies een stem</h1>
+    <p class="hint">
+      Tik op een naam om af te spelen. iPhone/Safari kan autoplay blokkeren: druk dan op ▶︎ in de player.
+    </p>
 
-<main>
+    <div class="card">
+      <div class="topRow">
+        <div class="loadingWrap" id="loadingWrap" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          <span id="loadingText">Laden…</span>
+        </div>
 
-  <h1>Kies een stem</h1>
+        <div class="wave" id="wave" aria-hidden="true" title="Afspelen">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </div>
+      </div>
 
-  <div class="player">
-    <audio id="audioPlayer" controls></audio>
-  </div>
+      <audio id="player" controls preload="none"></audio>
 
-  <h2>Mannenstemmen</h2>
-  <ul id="mannen"></ul>
+      <div class="status">
+        <span id="nowPlaying"><b>Kies een stem…</b></span>
+        <span id="techInfo" class="tag"></span>
+      </div>
 
-  <h2>Vrouwenstemmen</h2>
-  <ul id="vrouwen"></ul>
+      <div class="tiny">
+        Als je “Fout” ziet: zet in Dropbox bij elk bestand → Delen → Linkinstellingen → <b>Wachtwoord UIT</b> en <b>Iedereen met de link: Kan bekijken</b>.
+      </div>
+    </div>
 
-</main>
+    <div class="grid">
+      <section>
+        <h2>Mannenstemmen</h2>
+        <ul id="mannen"></ul>
+      </section>
 
-<footer>
-  © BrandingTotaal – Voice demo
-</footer>
+      <section>
+        <h2>Vrouwenstemmen</h2>
+        <ul id="vrouwen"></ul>
+      </section>
+    </div>
+  </main>
 
-<script>
-  const mannenStemmen = [
-    { t: "Ad", s: "https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?raw=1" },
-    { t: "Albert-Jan", s: "https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?raw=1" },
-    { t: "Bart (België)", s: "https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?raw=1" },
-    { t: "Bas", s: "https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?raw=1" },
-    { t: "Dave", s: "https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?raw=1" },
-    { t: "Erik-Jan", s: "https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?raw=1" },
-    { t: "Eelco", s: "https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?raw=1" },
-    { t: "Gerard", s: "https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?raw=1" },
-    { t: "Gijs", s: "https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?raw=1" },
-    { t: "Karel", s: "https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?raw=1" },
-    { t: "Koen", s: "https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?raw=1" },
-    { t: "Lex", s: "https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?raw=1" },
-    { t: "Marc", s: "https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?raw=1" },
-    { t: "Martin", s: "https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?raw=1" },
-    { t: "Marcel", s: "https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?raw=1" },
-    { t: "Maurice", s: "https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?raw=1" },
-    { t: "Melvin", s: "https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?raw=1" },
-    { t: "Paul", s: "https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?raw=1" },
-    { t: "René", s: "https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?raw=1" },
-    { t: "Rick", s: "https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?raw=1" },
-    { t: "Stefan", s: "https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?raw=1" },
-    { t: "USA Voice", s: "https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?raw=1" }
-  ];
+  <footer>© BrandingTotaal</footer>
 
-  const vrouwenStemmen = [
-    { t: "Romy", s: "https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?raw=1" },
-    { t: "Elvira", s: "https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?raw=1" },
-    { t: "Femke", s: "https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?raw=1" },
-    { t: "Fleur", s: "https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?raw=1" },
-    { t: "Jacqueline", s: "https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?raw=1" },
-    { t: "Kristel", s: "https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?raw=1" },
-    { t: "Nienke", s: "https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?raw=1" },
-    { t: "Sascha", s: "https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?raw=1" },
-    { t: "Tamara", s: "https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?raw=1" },
-    { t: "Jolanda", s: "https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?raw=1" }
-  ];
+  <script>
+    // Tip: als je ooit nog www.dropbox.com links hebt, maak ze direct:
+    function toDirect(url){
+      if(!url) return url;
+      url = url.replace("https://www.dropbox.com", "https://dl.dropboxusercontent.com");
+      url = url.replace("http://www.dropbox.com", "https://dl.dropboxusercontent.com");
+      // meestal is query niet nodig bij dl; maar als er rlkey/st is, laat die staan.
+      try{
+        const u = new URL(url);
+        const hasRlkey = u.searchParams.has("rlkey");
+        const hasSt = u.searchParams.has("st");
+        if(!hasRlkey && !hasSt) u.search = "";
+        u.searchParams.delete("raw");
+        u.searchParams.delete("dl");
+        return u.toString();
+      }catch(e){
+        return url;
+      }
+    }
 
-  const player = document.getElementById("audioPlayer");
+    // ====== JOUW MP3 LIJSTEN (volledig) ======
+    // Gebruik directe dl links (stabiel)
+    const mannenStemmen = [
+      { t:"Ad", s:"https://dl.dropboxusercontent.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3" },
+      { t:"Albert-Jan", s:"https://dl.dropboxusercontent.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3" },
+      { t:"Bart (België)", s:"https://dl.dropboxusercontent.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3" },
+      { t:"Bas", s:"https://dl.dropboxusercontent.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3" },
+      { t:"Dave", s:"https://dl.dropboxusercontent.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3" },
+      { t:"Erik-Jan", s:"https://dl.dropboxusercontent.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3" },
+      { t:"Eelco", s:"https://dl.dropboxusercontent.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3" },
+      { t:"Gerard", s:"https://dl.dropboxusercontent.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3" },
+      { t:"Gijs", s:"https://dl.dropboxusercontent.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3" },
+      { t:"Karel", s:"https://dl.dropboxusercontent.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3" },
+      { t:"Koen", s:"https://dl.dropboxusercontent.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3" },
+      { t:"Lex", s:"https://dl.dropboxusercontent.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3" },
+      { t:"Marc", s:"https://dl.dropboxusercontent.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3" },
+      { t:"Martin", s:"https://dl.dropboxusercontent.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3" },
+      { t:"Marcel", s:"https://dl.dropboxusercontent.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3" },
+      { t:"Maurice", s:"https://dl.dropboxusercontent.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3" },
+      { t:"Melvin", s:"https://dl.dropboxusercontent.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3" },
+      { t:"Paul", s:"https://dl.dropboxusercontent.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3" },
+      { t:"René", s:"https://dl.dropboxusercontent.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3" },
+      { t:"Rick", s:"https://dl.dropboxusercontent.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3" },
+      { t:"Stefan", s:"https://dl.dropboxusercontent.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3" },
+      { t:"USA Voice", s:"https://dl.dropboxusercontent.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3" }
+    ];
 
-  function render(list, elementId) {
-    const ul = document.getElementById(elementId);
-    list.forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item.t;
-      li.onclick = () => {
-        player.src = item.s;
-        player.play();
-      };
-      ul.appendChild(li);
+    const vrouwenStemmen = [
+      { t:"Romy", s:"https://dl.dropboxusercontent.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3" },
+      { t:"Elvira", s:"https://dl.dropboxusercontent.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3" },
+      { t:"Femke", s:"https://dl.dropboxusercontent.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3" },
+      { t:"Fleur", s:"https://dl.dropboxusercontent.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3" },
+      { t:"Jacqueline", s:"https://dl.dropboxusercontent.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3" },
+      { t:"Kristel", s:"https://dl.dropboxusercontent.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3" },
+      { t:"Nienke", s:"https://dl.dropboxusercontent.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3" },
+      { t:"Sascha", s:"https://dl.dropboxusercontent.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3" },
+      { t:"Tamara", s:"https://dl.dropboxusercontent.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3" },
+      { t:"Jolanda", s:"https://dl.dropboxusercontent.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3" }
+    ];
+
+    const player = document.getElementById("player");
+    const nowPlaying = document.getElementById("nowPlaying");
+    const techInfo = document.getElementById("techInfo");
+    const loadingWrap = document.getElementById("loadingWrap");
+    const loadingText = document.getElementById("loadingText");
+    const wave = document.getElementById("wave");
+
+    function setLoading(on, text){
+      loadingWrap.style.display = on ? "inline-flex" : "none";
+      if(text) loadingText.textContent = text;
+    }
+    function setWave(on){
+      wave.style.display = on ? "flex" : "none";
+    }
+    function clearDots(){
+      document.querySelectorAll(".dot").forEach(d => d.classList.remove("playing","error"));
+    }
+
+    function buildList(items, elId){
+      const ul = document.getElementById(elId);
+      ul.innerHTML = "";
+      items.forEach(item=>{
+        const li = document.createElement("li");
+
+        const left = document.createElement("div");
+        left.className = "left";
+
+        const dot = document.createElement("span");
+        dot.className = "dot";
+
+        const name = document.createElement("span");
+        name.className = "name";
+        name.textContent = item.t;
+
+        left.appendChild(dot);
+        left.appendChild(name);
+
+        const right = document.createElement("span");
+        right.className = "tag";
+        right.textContent = "mp3";
+
+        li.appendChild(left);
+        li.appendChild(right);
+
+        li.onclick = () => {
+          document.querySelectorAll("li").forEach(x => x.classList.remove("active"));
+          li.classList.add("active");
+
+          clearDots();
+          dot.classList.add("playing");
+
+          setWave(false);
+          setLoading(true,"Laden…");
+          techInfo.textContent = "";
+          nowPlaying.innerHTML = "<b>Laden:</b> " + item.t;
+
+          player.pause();
+          player.currentTime = 0;
+
+          player.src = toDirect(item.s);
+
+          player.play().catch(() => {
+            setLoading(false);
+            setWave(false);
+            techInfo.textContent = "Klaar";
+            nowPlaying.innerHTML = "<b>Klaar:</b> " + item.t + " (druk op ▶︎)";
+          });
+        };
+
+        ul.appendChild(li);
+      });
+    }
+
+    // Player events: loading/wave/status
+    player.addEventListener("loadstart", () => setLoading(true, "Laden…"));
+    player.addEventListener("waiting", () => setLoading(true, "Bufferen…"));
+    player.addEventListener("canplay", () => { setLoading(false); techInfo.textContent="Gereed"; });
+    player.addEventListener("playing", () => { setLoading(false); setWave(true); techInfo.textContent="Afspelen"; });
+    player.addEventListener("pause",   () => { setWave(false); techInfo.textContent="Pauze"; });
+    player.addEventListener("ended",   () => { setWave(false); techInfo.textContent="Klaar"; });
+
+    player.addEventListener("error", () => {
+      setLoading(false);
+      setWave(false);
+      techInfo.textContent = "Fout";
+      nowPlaying.innerHTML =
+        "<b>Fout:</b> Dropbox blokkeert deze file. Zet wachtwoord UIT en 'Iedereen met de link' AAN.";
+      const activeDot = document.querySelector("li.active .dot");
+      if(activeDot){
+        activeDot.classList.remove("playing");
+        activeDot.classList.add("error");
+      }
     });
-  }
 
-  render(mannenStemmen, "mannen");
-  render(vrouwenStemmen, "vrouwen");
-</script>
-
+    // Init
+    buildList(mannenStemmen, "mannen");
+    buildList(vrouwenStemmen, "vrouwen");
+  </script>
 </body>
 </html>
