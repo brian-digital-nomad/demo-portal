@@ -176,89 +176,162 @@ footer{
     © BrandingTotaal – Demo portal
   </footer>
 </div>
-
 <script>
-// -------- OBFUSCATION --------
-const join=(...p)=>p.join("");
-const raw=u=>u.includes("?")?u+"&raw=1":u+"?raw=1";
-const drop=p=>raw(join("https://www.dropbox.com",p));
+/* =========================
+   DEFINITIEF SCRIPTBLOK
+   - Dropbox streaming fix
+   - Mannen/Vrouwen tabs
+   - Playlist + klikken
+   - Next/Prev/Play/Pause
+   - Autoplay next
+   ========================= */
 
-// -------- DATA --------
-const mannenStemmen=[
- {t:"Ad",s:drop("/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3")},
- {t:"Albert-Jan",s:drop("/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3")},
- {t:"Bart (België)",s:drop("/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3")},
- {t:"Bas",s:drop("/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3")},
- {t:"Dave",s:drop("/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3")},
- {t:"Erik-Jan",s:drop("/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3")},
- {t:"Eelco",s:drop("/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3")},
- {t:"Gerard",s:drop("/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3")},
- {t:"Gijs",s:drop("/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3")},
- {t:"Karel",s:drop("/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3")},
- {t:"Koen",s:drop("/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3")},
- {t:"Lex",s:drop("/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3")},
- {t:"Marc",s:drop("/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3")},
- {t:"Martin",s:drop("/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3")},
- {t:"Marcel",s:drop("/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3")},
- {t:"Maurice",s:drop("/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3")},
- {t:"Melvin",s:drop("/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3")},
- {t:"Paul",s:drop("/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3")},
- {t:"René",s:drop("/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3")},
- {t:"Rick",s:drop("/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3")},
- {t:"Stefan",s:drop("/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3")},
- {t:"USA Voice",s:drop("/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3")}
+// 1) Dropbox URL builder (BELANGRIJK: usercontent host, geen ?raw=1 nodig)
+function drop(path){
+  return "https://dl.dropboxusercontent.com" + path;
+}
+
+// 2) DATA (jouw stemmen)
+const mannenStemmen = [
+  {t:"Ad",s:drop("/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3")},
+  {t:"Albert-Jan",s:drop("/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3")},
+  {t:"Bart (België)",s:drop("/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3")},
+  {t:"Bas",s:drop("/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3")},
+  {t:"Dave",s:drop("/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3")},
+  {t:"Erik-Jan",s:drop("/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3")},
+  {t:"Eelco",s:drop("/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3")},
+  {t:"Gerard",s:drop("/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3")},
+  {t:"Gijs",s:drop("/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3")},
+  {t:"Karel",s:drop("/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3")},
+  {t:"Koen",s:drop("/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3")},
+  {t:"Lex",s:drop("/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3")},
+  {t:"Marc",s:drop("/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3")},
+  {t:"Martin",s:drop("/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3")},
+  {t:"Marcel",s:drop("/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3")},
+  {t:"Maurice",s:drop("/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3")},
+  {t:"Melvin",s:drop("/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3")},
+  {t:"Paul",s:drop("/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3")},
+  {t:"René",s:drop("/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3")},
+  {t:"Rick",s:drop("/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3")},
+  {t:"Stefan",s:drop("/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3")},
+  {t:"USA Voice",s:drop("/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3")}
 ];
 
-const vrouwenStemmen=[
- {t:"Romy",s:drop("/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3")},
- {t:"Elvira",s:drop("/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3")},
- {t:"Femke",s:drop("/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3")},
- {t:"Fleur",s:drop("/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3")},
- {t:"Jacqueline",s:drop("/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3")},
- {t:"Kristel",s:drop("/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3")},
- {t:"Nienke",s:drop("/scl/fi/d71wygnuie878z027h59b/Nienke.mp3")},
- {t:"Sascha",s:drop("/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3")},
- {t:"Tamara",s:drop("/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3")},
- {t:"Jolanda",s:drop("/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3")}
+const vrouwenStemmen = [
+  {t:"Romy",s:drop("/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3")},
+  {t:"Elvira",s:drop("/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3")},
+  {t:"Femke",s:drop("/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3")},
+  {t:"Fleur",s:drop("/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3")},
+  {t:"Jacqueline",s:drop("/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3")},
+  {t:"Kristel",s:drop("/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3")},
+  {t:"Nienke",s:drop("/scl/fi/d71wygnuie878z027h59b/Nienke.mp3")},
+  {t:"Sascha",s:drop("/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3")},
+  {t:"Tamara",s:drop("/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3")},
+  {t:"Jolanda",s:drop("/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3")}
 ];
 
-// -------- PLAYER --------
-const player=document.getElementById("player");
-const list=document.getElementById("list");
-const now=document.getElementById("nowPlaying");
-const btnM=document.getElementById("btnMannen");
-const btnV=document.getElementById("btnVrouwen");
-let tracks=mannenStemmen, index=-1;
+// 3) UI hooks
+const player = document.getElementById("player");
+const listEl = document.getElementById("list");
+const nowEl = document.getElementById("nowPlaying");
 
+const btnMannen = document.getElementById("btnMannen");
+const btnVrouwen = document.getElementById("btnVrouwen");
+
+const btnPrev = document.getElementById("prev");
+const btnPlay = document.getElementById("play");
+const btnPause = document.getElementById("pause");
+const btnNext = document.getElementById("next");
+
+// 4) State
+let tracks = mannenStemmen;
+let index = -1;
+
+// 5) Render
 function render(){
- list.innerHTML="";
- tracks.forEach((x,i)=>{
-  const li=document.createElement("li");
-  li.textContent=x.t;
-  if(i===index) li.classList.add("active");
-  li.onclick=()=>play(i);
-  list.appendChild(li);
- });
+  listEl.innerHTML = "";
+  tracks.forEach((x, i) => {
+    const li = document.createElement("li");
+    li.textContent = x.t;
+
+    if(i === index) li.classList.add("active");
+
+    li.addEventListener("click", () => playAt(i), { passive:true });
+    listEl.appendChild(li);
+  });
 }
-function play(i){
- index=i;
- player.src=tracks[i].s;
- player.play();
- now.textContent="Nu speelt: "+tracks[i].t;
- render();
+
+// 6) Play logic (HIER STAAT player.src)
+function playAt(i, autoplay=true){
+  if(!tracks.length) return;
+
+  index = i;
+  const track = tracks[index];
+
+  // Zet audio bron
+  player.src = track.s;
+
+  // Update UI
+  nowEl.textContent = "Nu speelt: " + track.t;
+  render();
+
+  if(autoplay){
+    player.play().catch(() => {
+      // Autoplay kan geblokkeerd zijn; user kan op Play klikken
+    });
+  }
 }
-player.onended=()=>{if(index+1<tracks.length)play(index+1);};
 
-btnM.onclick=()=>{btnM.classList.add("active");btnV.classList.remove("active");tracks=mannenStemmen;index=-1;now.textContent="Kies een stem";player.src="";render();};
-btnV.onclick=()=>{btnV.classList.add("active");btnM.classList.remove("active");tracks=vrouwenStemmen;index=-1;now.textContent="Kies een stem";player.src="";render();};
+function next(){
+  if(!tracks.length) return;
+  const ni = (index + 1) % tracks.length;
+  playAt(ni, true);
+}
 
-document.getElementById("play").onclick=()=>player.play();
-document.getElementById("pause").onclick=()=>player.pause();
-document.getElementById("prev").onclick=()=>{if(index>0)play(index-1);};
-document.getElementById("next").onclick=()=>{if(index+1<tracks.length)play(index+1);};
+function prev(){
+  if(!tracks.length) return;
+  const pi = (index - 1 + tracks.length) % tracks.length;
+  playAt(pi, true);
+}
 
+// 7) Buttons
+btnPlay?.addEventListener("click", () => player.play());
+btnPause?.addEventListener("click", () => player.pause());
+btnNext?.addEventListener("click", () => next());
+btnPrev?.addEventListener("click", () => prev());
+
+// 8) Tabs
+btnMannen?.addEventListener("click", () => {
+  btnMannen.classList.add("active");
+  btnVrouwen.classList.remove("active");
+  tracks = mannenStemmen;
+  index = -1;
+  nowEl.textContent = "Kies een stem";
+  player.removeAttribute("src");
+  player.load();
+  render();
+});
+
+btnVrouwen?.addEventListener("click", () => {
+  btnVrouwen.classList.add("active");
+  btnMannen.classList.remove("active");
+  tracks = vrouwenStemmen;
+  index = -1;
+  nowEl.textContent = "Kies een stem";
+  player.removeAttribute("src");
+  player.load();
+  render();
+});
+
+// 9) Auto next when ended
+player.addEventListener("ended", () => next());
+
+// 10) Init
+nowEl.textContent = "Kies een stem";
 render();
 </script>
+
+
 
 </body>
 </html>
