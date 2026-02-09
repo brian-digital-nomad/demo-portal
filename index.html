@@ -1,350 +1,161 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stemmen Portal – BrandingTotaal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BrandingTotaal – Stemmen Demo</title>
 
-<style>
-:root{
-  --bg:#0b1220;
-  --panel:#111a2e;
-  --text:#e5e7eb;
-  --muted:rgba(229,231,235,.7);
-  --line:rgba(255,255,255,.12);
-  --accent:#38bdf8;
-  --radius:14px;
-}
-*{box-sizing:border-box;}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:radial-gradient(900px 500px at 10% -10%,rgba(56,189,248,.15),transparent 60%),var(--bg);
-  color:var(--text);
-}
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:rgba(17,26,46,.85);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);
-  padding:14px 16px;
-}
-.brand{
-  max-width:980px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-.logo{
-  width:52px;
-  height:52px;
-  border-radius:14px;
-  overflow:hidden;
-  border:1px solid var(--line);
-}
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  background:#000;
-}
-.brand h1{
-  margin:0;
-  font-size:18px;
-}
-.brand p{
-  margin:2px 0 0;
-  font-size:12px;
-  color:var(--muted);
-}
-.wrap{
-  max-width:980px;
-  margin:auto;
-  padding:16px;
-}
-.card{
-  background:rgba(17,26,46,.85);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:16px;
-}
-.tabs, .controls{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-}
-button{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  padding:10px 14px;
-  border-radius:12px;
-  font-weight:700;
-  cursor:pointer;
-}
-button.active{
-  background:rgba(56,189,248,.2);
-  border-color:rgba(56,189,248,.6);
-}
-.now{
-  margin:14px 0;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-}
-audio{
-  width:100%;
-  margin-bottom:12px;
-}
-ul{
-  list-style:none;
-  padding:0;
-  margin:0;
-  border-top:1px solid var(--line);
-}
-li{
-  padding:12px 10px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  cursor:pointer;
-}
-li.active{
-  background:rgba(56,189,248,.15);
-}
-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:18px 0;
-}
-@media(max-width:520px){
-  button{flex:1 1 calc(50% - 6px);}
-}
-</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    header {
+      padding: 16px;
+      text-align: center;
+      background: #020617;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    header img {
+      max-width: 160px;
+      height: auto;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1, h2 {
+      margin-top: 24px;
+      font-weight: 600;
+    }
+
+    .player {
+      margin: 16px 0;
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      cursor: pointer;
+    }
+
+    li:hover {
+      background: rgba(255,255,255,.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div class="brand">
-    <a href="https://brandingtotaal.nl" target="_blank" class="logo">
-      <img src="https://www.dropbox.com/scl/fi/duhfszbna6gp47e27fim1/Branding-Totaal-logo-button-mouse-2025-white-text-R.png?raw=1" alt="BrandingTotaal">
-    </a>
-    <div>
-      <h1>Stemmen Portal</h1>
-      <p>Klik op een stem om af te spelen</p>
-    </div>
-  </div>
+  <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">
+    <img src="https://www.dropbox.com/scl/fi/a96h1qrs7yzbc8cin9czg/icon-BrandingTotaal-logo-2025.jpg?raw=1"
+         alt="BrandingTotaal logo">
+  </a>
 </header>
 
-<div class="wrap">
-  <div class="card">
+<main>
 
-    <div class="row">
-      <div class="tabs">
-        <button id="btnMannen" class="active">Mannen stemmen</button>
-        <button id="btnVrouwen">Vrouwen stemmen</button>
-      </div>
-      <div class="controls">
-        <button id="prev">⏮</button>
-        <button id="play">▶️</button>
-        <button id="pause">⏸</button>
-        <button id="next">⏭</button>
-      </div>
-    </div>
+  <h1>Kies een stem</h1>
 
-    <div class="now" id="nowPlaying">Kies een stem</div>
-
-    <audio id="player" controls preload="metadata"></audio>
-
-    <ul id="list"></ul>
-
+  <div class="player">
+    <audio id="audioPlayer" controls></audio>
   </div>
 
-  <footer>
-    © BrandingTotaal – Demo portal
-  </footer>
-</div>
+  <h2>Mannenstemmen</h2>
+  <ul id="mannen"></ul>
+
+  <h2>Vrouwenstemmen</h2>
+  <ul id="vrouwen"></ul>
+
+</main>
+
+<footer>
+  © BrandingTotaal – Voice demo
+</footer>
+
 <script>
-/* =========================
-   DEFINITIEF SCRIPTBLOK (Dropbox www + raw=1)
-   - Werkt met jouw bestaande Dropbox-links
-   - Auto corrigeert dl=0 -> raw=1
-   - Playlist + tabs + next/prev
-   - Toont foutmelding als audio blokkeert
-   ========================= */
+  const mannenStemmen = [
+    { t: "Ad", s: "https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?raw=1" },
+    { t: "Albert-Jan", s: "https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?raw=1" },
+    { t: "Bart (België)", s: "https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?raw=1" },
+    { t: "Bas", s: "https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?raw=1" },
+    { t: "Dave", s: "https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?raw=1" },
+    { t: "Erik-Jan", s: "https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?raw=1" },
+    { t: "Eelco", s: "https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?raw=1" },
+    { t: "Gerard", s: "https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?raw=1" },
+    { t: "Gijs", s: "https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?raw=1" },
+    { t: "Karel", s: "https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?raw=1" },
+    { t: "Koen", s: "https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?raw=1" },
+    { t: "Lex", s: "https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?raw=1" },
+    { t: "Marc", s: "https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?raw=1" },
+    { t: "Martin", s: "https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?raw=1" },
+    { t: "Marcel", s: "https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?raw=1" },
+    { t: "Maurice", s: "https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?raw=1" },
+    { t: "Melvin", s: "https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?raw=1" },
+    { t: "Paul", s: "https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?raw=1" },
+    { t: "René", s: "https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?raw=1" },
+    { t: "Rick", s: "https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?raw=1" },
+    { t: "Stefan", s: "https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?raw=1" },
+    { t: "USA Voice", s: "https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?raw=1" }
+  ];
 
-// 1) Link normalizer: maakt altijd een directe mp3-url (raw=1)
-function toRawDropbox(url){
-  if(!url) return url;
+  const vrouwenStemmen = [
+    { t: "Romy", s: "https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?raw=1" },
+    { t: "Elvira", s: "https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?raw=1" },
+    { t: "Femke", s: "https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?raw=1" },
+    { t: "Fleur", s: "https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?raw=1" },
+    { t: "Jacqueline", s: "https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?raw=1" },
+    { t: "Kristel", s: "https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?raw=1" },
+    { t: "Nienke", s: "https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?raw=1" },
+    { t: "Sascha", s: "https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?raw=1" },
+    { t: "Tamara", s: "https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?raw=1" },
+    { t: "Jolanda", s: "https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?raw=1" }
+  ];
 
-  // Als iemand per ongeluk een "dl.dropboxusercontent.com" link gebruikt
-  // zetten we 'm terug naar www.dropbox.com (want usercontent geeft bij jou 403)
-  url = url.replace("https://dl.dropboxusercontent.com", "https://www.dropbox.com");
+  const player = document.getElementById("audioPlayer");
 
-  // Zorg dat raw=1 erin zit (en dl=0 eruit)
-  if(url.includes("dl=0")) url = url.replace("dl=0", "raw=1");
-  if(url.includes("?raw=1") || url.includes("&raw=1")) return url;
-
-  // Heeft al query?
-  if(url.includes("?")) return url + "&raw=1";
-  return url + "?raw=1";
-}
-
-// 2) DATA (jouw stemmen exact, met www.dropbox.com links)
-const mannenStemmen = [
-  {t:"Ad",s:"https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?raw=1"},
-  {t:"Albert-Jan",s:"https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?raw=1"},
-  {t:"Bart (België)",s:"https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?raw=1"},
-  {t:"Bas",s:"https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?raw=1"},
-  {t:"Dave",s:"https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?raw=1"},
-  {t:"Erik-Jan",s:"https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?raw=1"},
-  {t:"Eelco",s:"https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?raw=1"},
-  {t:"Gerard",s:"https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?raw=1"},
-  {t:"Gijs",s:"https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?raw=1"},
-  {t:"Karel",s:"https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?raw=1"},
-  {t:"Koen",s:"https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?raw=1"},
-  {t:"Lex",s:"https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?raw=1"},
-  {t:"Marc",s:"https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?raw=1"},
-  {t:"Martin",s:"https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?raw=1"},
-  {t:"Marcel",s:"https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?raw=1"},
-  {t:"Maurice",s:"https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?raw=1"},
-  {t:"Melvin",s:"https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?raw=1"},
-  {t:"Paul",s:"https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?raw=1"},
-  {t:"René",s:"https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?raw=1"},
-  {t:"Rick",s:"https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?raw=1"},
-  {t:"Stefan",s:"https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?raw=1"},
-  {t:"USA Voice",s:"https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?raw=1"}
-];
-
-const vrouwenStemmen = [
-  {t:"Romy",s:"https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?raw=1"},
-  {t:"Elvira",s:"https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?raw=1"},
-  {t:"Femke",s:"https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?raw=1"},
-  {t:"Fleur",s:"https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?raw=1"},
-  {t:"Jacqueline",s:"https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?raw=1"},
-  {t:"Kristel",s:"https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?raw=1"},
-  {t:"Nienke",s:"https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?raw=1"},
-  {t:"Sascha",s:"https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?raw=1"},
-  {t:"Tamara",s:"https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?raw=1"},
-  {t:"Jolanda",s:"https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?raw=1"}
-];
-
-// 3) UI hooks
-const player = document.getElementById("player");
-const listEl = document.getElementById("list");
-const nowEl = document.getElementById("nowPlaying");
-
-const btnMannen = document.getElementById("btnMannen");
-const btnVrouwen = document.getElementById("btnVrouwen");
-const btnPrev = document.getElementById("prev");
-const btnPlay = document.getElementById("play");
-const btnPause = document.getElementById("pause");
-const btnNext = document.getElementById("next");
-
-// 4) State
-let tracks = mannenStemmen;
-let index = -1;
-
-// 5) Render playlist
-function render(){
-  listEl.innerHTML = "";
-  tracks.forEach((x,i)=>{
-    const li = document.createElement("li");
-    li.textContent = x.t;
-    if(i === index) li.classList.add("active");
-    li.onclick = () => playAt(i, true);
-    listEl.appendChild(li);
-  });
-}
-
-// 6) Play (HIER staat player.src)
-function playAt(i, autoplay=true){
-  if(!tracks.length) return;
-  index = i;
-
-  const track = tracks[index];
-  const url = toRawDropbox(track.s);
-
-  player.src = url;
-  nowEl.textContent = "Nu speelt: " + track.t;
-
-  render();
-
-  if(autoplay){
-    player.play().catch(()=>{ /* autoplay kan geblokkeerd zijn */ });
+  function render(list, elementId) {
+    const ul = document.getElementById(elementId);
+    list.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.t;
+      li.onclick = () => {
+        player.src = item.s;
+        player.play();
+      };
+      ul.appendChild(li);
+    });
   }
-}
 
-// 7) Controls
-function next(){
-  if(!tracks.length) return;
-  const ni = (index + 1) % tracks.length;
-  playAt(ni, true);
-}
-function prev(){
-  if(!tracks.length) return;
-  const pi = (index - 1 + tracks.length) % tracks.length;
-  playAt(pi, true);
-}
-
-btnPlay?.onclick = () => player.play();
-btnPause?.onclick = () => player.pause();
-btnNext?.onclick = () => next();
-btnPrev?.onclick = () => prev();
-
-// 8) Tabs
-btnMannen?.onclick = () => {
-  btnMannen.classList.add("active");
-  btnVrouwen.classList.remove("active");
-  tracks = mannenStemmen;
-  index = -1;
-  nowEl.textContent = "Kies een stem";
-  player.removeAttribute("src");
-  player.load();
-  render();
-};
-
-btnVrouwen?.onclick = () => {
-  btnVrouwen.classList.add("active");
-  btnMannen.classList.remove("active");
-  tracks = vrouwenStemmen;
-  index = -1;
-  nowEl.textContent = "Kies een stem";
-  player.removeAttribute("src");
-  player.load();
-  render();
-};
-
-// 9) Autoplay next when ended
-player.addEventListener("ended", () => next());
-
-// 10) Toon duidelijke foutmelding als Dropbox blokkeert
-player.addEventListener("error", () => {
-  const track = tracks[index];
-  const url = track ? toRawDropbox(track.s) : "";
-  nowEl.textContent = "❌ Kan mp3 niet laden. Controleer Dropbox-link of privacy. (" + (track?.t || "") + ")";
-  if(url) console.log("Audio load failed URL:", url);
-});
-
-// 11) Init
-nowEl.textContent = "Kies een stem";
-render();
+  render(mannenStemmen, "mannen");
+  render(vrouwenStemmen, "vrouwen");
 </script>
-
-
-
 
 </body>
 </html>
