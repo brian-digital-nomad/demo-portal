@@ -228,6 +228,46 @@ const vrouwenStemmen = [
   { title: "Tamara", src: "https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?raw=1" },
   { title: "Jolanda", src: "https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?raw=1" },
 ];
+const mannenStemmen = [...]
+const vrouwenStemmen = [...]
+const player = document.getElementById("player");
+const nowPlaying = document.getElementById("nowPlaying");
+const listEl = document.getElementById("list");
+
+let tracks = mannenStemmen;
+let index = 0;
+
+function renderPlaylist() {
+  listEl.innerHTML = "";
+  tracks.forEach((track, i) => {
+    const li = document.createElement("li");
+    li.textContent = track.title;
+    li.style.cursor = "pointer";
+    li.onclick = () => load(i, true);
+    listEl.appendChild(li);
+  });
+}
+
+function load(i, autoplay = false) {
+  index = i;
+  player.src = tracks[index].src;
+  nowPlaying.textContent = tracks[index].title;
+  if (autoplay) player.play();
+}
+
+function setPlaylist(list) {
+  tracks = list;
+  renderPlaylist();
+  load(0, false);
+}
+
+player.addEventListener("ended", () => {
+  index = (index + 1) % tracks.length;
+  load(index, true);
+});
+
+// start
+renderPlaylist();
 
 // kies welke playlist start
 let tracks = mannenStemmen; // of: vrouwenStemmen
