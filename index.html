@@ -1,403 +1,264 @@
-html
-
-<h2 id="nowPlaying">Kies een stem</h2>
-
-<audio id="player" controls style="width:100%; margin-bottom:20px;">
-  Your browser does not support the audio element.
-</audio>
-
-<ul id="list"></ul>
-
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="robots" content="noindex,nofollow" />
-  <title>Demo Portal</title>
-  <style>
-    :root{
-      --bg:#0b0b0f;
-      --card:#13131a;
-      --card2:#1b1b26;
-      --text:#f2f2f5;
-      --muted:rgba(242,242,245,.72);
-      --line:rgba(255,255,255,.10);
-      --radius:16px;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    header{
-      position:sticky; top:0; z-index:10;
-      background:linear-gradient(180deg, rgba(11,11,15,1) 0%, rgba(11,11,15,.92) 100%);
-      border-bottom:1px solid var(--line);
-      backdrop-filter: blur(8px);
-    }
-    .wrap{ max-width:1020px; margin:0 auto; padding:16px 18px; }
-    .top{
-      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    }
-    .brand{ display:flex; align-items:center; gap:12px; min-width: 240px; }
-    .logo{
-      width:40px; height:40px; border-radius:12px;
-      background:rgba(255,255,255,.06);
-      border:1px solid var(--line);
-      display:grid; place-items:center;
-      overflow:hidden;
-      flex:0 0 auto;
-    }
-    .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-    .titles h1{ margin:0; font-size:16px; letter-spacing:.2px; }
-    .titles p{ margin:2px 0 0; font-size:12.5px; color:var(--muted); }
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; width:100%;
-    }
-    .bar{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:12px;
-    }
-    input, select{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:var(--card);
-      color:var(--text);
-      outline:none;
-    }
-    input{ flex:1; min-width:220px; }
-    button{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:var(--card2);
-      color:var(--text);
-      cursor:pointer;
-    }
-    button:hover{ filter:brightness(1.08); }
-    main{ padding: 12px 0 26px; }
-    .hint{
-      font-size:12px; color:var(--muted);
-      padding: 0 18px;
-      max-width:1020px; margin: 10px auto 0;
-    }
-    .list{
-      max-width:1020px;
-      margin: 0 auto;
-      padding: 0 18px;
-      display:block;
-    }
-    h2{
-      margin:18px 0 10px;
-      font-size:14px;
-      color:rgba(242,242,245,.92);
-      font-weight:600;
-      letter-spacing:.2px;
-    }
-    .group{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      border-radius: var(--radius);
-      padding: 12px;
-      margin-bottom: 14px;
-    }
-    .items{ display:grid; gap:10px; }
-    .item{
-      padding:12px;
-      border-radius:14px;
-      background:var(--card);
-      border:1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .left{ min-width: 220px; }
-    .title{ font-size:14px; }
-    .sub{ font-size:12px; color:var(--muted); margin-top:3px; }
-    audio{ width: 380px; max-width: 56vw; }
-    .empty{
-      font-size:12px;
-      color:var(--muted);
-      padding: 10px 0 0;
-    }
-    footer{
-      border-top:1px solid var(--line);
-      margin-top: 18px;
-      color:var(--muted);
-      font-size:12px;
-    }
-    @media (max-width: 740px){
-      audio{ width:100%; max-width:100%; }
-      .item{ flex-direction:column; align-items:stretch; }
-      .actions{ justify-content:flex-start; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stemmen Portal – BrandingTotaal</title>
+
+<style>
+:root{
+  --bg:#0b1220;
+  --panel:#111a2e;
+  --text:#e5e7eb;
+  --muted:rgba(229,231,235,.7);
+  --line:rgba(255,255,255,.12);
+  --accent:#38bdf8;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:radial-gradient(900px 500px at 10% -10%,rgba(56,189,248,.15),transparent 60%),var(--bg);
+  color:var(--text);
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(17,26,46,.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 16px;
+}
+.brand{
+  max-width:980px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.logo{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+.brand h1{
+  margin:0;
+  font-size:18px;
+}
+.brand p{
+  margin:2px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+.wrap{
+  max-width:980px;
+  margin:auto;
+  padding:16px;
+}
+.card{
+  background:rgba(17,26,46,.85);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+}
+.tabs, .controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+button{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+button.active{
+  background:rgba(56,189,248,.2);
+  border-color:rgba(56,189,248,.6);
+}
+.now{
+  margin:14px 0;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+}
+audio{
+  width:100%;
+  margin-bottom:12px;
+}
+ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+  border-top:1px solid var(--line);
+}
+li{
+  padding:12px 10px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+}
+li.active{
+  background:rgba(56,189,248,.15);
+}
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:18px 0;
+}
+@media(max-width:520px){
+  button{flex:1 1 calc(50% - 6px);}
+}
+</style>
 </head>
+
 <body>
 
 <header>
-  <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <!-- LOGO:
-             Zet je logo-bestand in dezelfde map als deze HTML en noem het "logo.png"
-             (of pas de bestandsnaam hieronder aan). -->
-        <div class="logo" aria-label="Logo">
-          <img src="logo.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.textContent='◎';" />
-        </div>
-        <div class="titles">
-          <h1>Demo Portal</h1>
-          <p>Privé demo’s • noindex/nofollow</p>
-        </div>
-      </div>
-
-      <div class="actions">
-        <div class="bar" style="width:100%;">
-          <input id="q" placeholder="Zoek op tracknaam…" autocomplete="off" />
-          <select id="sort">
-            <option value="az">Sorteer: A–Z</option>
-            <option value="za">Sorteer: Z–A</option>
-          </select>
-          <button id="stopAll" type="button">Stop alles</button>
-        </div>
-      </div>
+  <div class="brand">
+    <a href="https://brandingtotaal.nl" target="_blank" class="logo">
+      <img src="https://www.dropbox.com/scl/fi/duhfszbna6gp47e27fim1/Branding-Totaal-logo-button-mouse-2025-white-text-R.png?raw=1" alt="BrandingTotaal">
+    </a>
+    <div>
+      <h1>Stemmen Portal</h1>
+      <p>Klik op een stem om af te spelen</p>
     </div>
   </div>
 </header>
 
-<div class="hint">
-  Tip: zet in Dropbox je linkinstellingen op <b>wachtwoord</b> + (indien beschikbaar) <b>downloads uit</b>.
-  In de browser kunnen downloads nooit 100% worden uitgesloten, maar we verbergen ze wel (nodownload) en schakelen directory listing niet in.
+<div class="wrap">
+  <div class="card">
+
+    <div class="row">
+      <div class="tabs">
+        <button id="btnMannen" class="active">Mannen stemmen</button>
+        <button id="btnVrouwen">Vrouwen stemmen</button>
+      </div>
+      <div class="controls">
+        <button id="prev">⏮</button>
+        <button id="play">▶️</button>
+        <button id="pause">⏸</button>
+        <button id="next">⏭</button>
+      </div>
+    </div>
+
+    <div class="now" id="nowPlaying">Kies een stem</div>
+
+    <audio id="player" controls preload="metadata"></audio>
+
+    <ul id="list"></ul>
+
+  </div>
+
+  <footer>
+    © BrandingTotaal – Demo portal
+  </footer>
 </div>
 
-<main>
-  <div id="list" class="list"></div>
-</main>
-
-<footer>
-  <div class="wrap">
-    Alleen voor demo-luisteren. Niet doorsturen.
-  </div>
-</footer>
-
 <script>
-  // =========================
-  // 1) PLAK HIER JE DROPBOX BESTANDSLINKS (dus /scl/fi/.../naam.mp3?... )
-  //    Zet in elke link het einde van ...&dl=0 naar ...&raw=1
-  // =========================
+// -------- OBFUSCATION --------
+const join=(...p)=>p.join("");
+const raw=u=>u.includes("?")?u+"&raw=1":u+"?raw=1";
+const drop=p=>raw(join("https://www.dropbox.com",p));
 
-  const mannenStemmen = [
-  { title: "Ad", src: "https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?raw=1" },
-  { title: "Albert-Jan", src: "https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?raw=1" },
-  { title: "Bart (België)", src: "https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?raw=1" },
-  { title: "Bas", src: "https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?raw=1" },
-  { title: "Dave", src: "https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?raw=1" },
-  { title: "Erik-Jan", src: "https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?raw=1" },
-  { title: "Eelco", src: "https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?raw=1" },
-  { title: "Gerard", src: "https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?raw=1" },
-  { title: "Gijs", src: "https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?raw=1" },
-  { title: "Karel", src: "https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?raw=1" },
-  { title: "Koen", src: "https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?raw=1" },
-  { title: "Lex", src: "https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?raw=1" },
-  { title: "Marc", src: "https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?raw=1" },
-  { title: "Martin", src: "https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?raw=1" },
-  { title: "Marcel", src: "https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?raw=1" },
-  { title: "Maurice", src: "https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?raw=1" },
-  { title: "Melvin", src: "https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?raw=1" },
-  { title: "Paul", src: "https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?raw=1" },
-  { title: "René", src: "https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?raw=1" },
-  { title: "Rick", src: "https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?raw=1" },
-  { title: "Stefan", src: "https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?raw=1" },
-  { title: "USA Voice", src: "https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?raw=1" },
+// -------- DATA --------
+const mannenStemmen=[
+ {t:"Ad",s:drop("/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3")},
+ {t:"Albert-Jan",s:drop("/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3")},
+ {t:"Bart (België)",s:drop("/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3")},
+ {t:"Bas",s:drop("/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3")},
+ {t:"Dave",s:drop("/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3")},
+ {t:"Erik-Jan",s:drop("/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3")},
+ {t:"Eelco",s:drop("/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3")},
+ {t:"Gerard",s:drop("/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3")},
+ {t:"Gijs",s:drop("/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3")},
+ {t:"Karel",s:drop("/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3")},
+ {t:"Koen",s:drop("/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3")},
+ {t:"Lex",s:drop("/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3")},
+ {t:"Marc",s:drop("/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3")},
+ {t:"Martin",s:drop("/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3")},
+ {t:"Marcel",s:drop("/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3")},
+ {t:"Maurice",s:drop("/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3")},
+ {t:"Melvin",s:drop("/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3")},
+ {t:"Paul",s:drop("/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3")},
+ {t:"René",s:drop("/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3")},
+ {t:"Rick",s:drop("/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3")},
+ {t:"Stefan",s:drop("/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3")},
+ {t:"USA Voice",s:drop("/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3")}
 ];
 
-const vrouwenStemmen = [
-  { title: "Romy", src: "https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?raw=1" },
-  { title: "Elvira", src: "https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?raw=1" },
-  { title: "Femke", src: "https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?raw=1" },
-  { title: "Fleur", src: "https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?raw=1" },
-  { title: "Jacqueline", src: "https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?raw=1" },
-  { title: "Kristel", src: "https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?raw=1" },
-  { title: "Nienke", src: "https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?raw=1" },
-  { title: "Sascha", src: "https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?raw=1" },
-  { title: "Tamara", src: "https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?raw=1" },
-  { title: "Jolanda", src: "https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?raw=1" },
-];
-const mannenStemmen = [...]
-const vrouwenStemmen = [...]
-const player = document.getElementById("player");
-const nowPlaying = document.getElementById("nowPlaying");
-const listEl = document.getElementById("list");
-
-let tracks = mannenStemmen;
-let index = 0;
-
-function renderPlaylist() {
-  listEl.innerHTML = "";
-  tracks.forEach((track, i) => {
-    const li = document.createElement("li");
-    li.textContent = track.title;
-    li.style.cursor = "pointer";
-    li.onclick = () => load(i, true);
-    listEl.appendChild(li);
-  });
-}
-
-function load(i, autoplay = false) {
-  index = i;
-  player.src = tracks[index].src;
-  nowPlaying.textContent = tracks[index].title;
-  if (autoplay) player.play();
-}
-
-function setPlaylist(list) {
-  tracks = list;
-  renderPlaylist();
-  load(0, false);
-}
-
-player.addEventListener("ended", () => {
-  index = (index + 1) % tracks.length;
-  load(index, true);
-});
-
-// start
-renderPlaylist();
-
-// kies welke playlist start
-let tracks = mannenStemmen; // of: vrouwenStemmen
+const vrouwenStemmen=[
+ {t:"Romy",s:drop("/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3")},
+ {t:"Elvira",s:drop("/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3")},
+ {t:"Femke",s:drop("/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3")},
+ {t:"Fleur",s:drop("/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3")},
+ {t:"Jacqueline",s:drop("/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3")},
+ {t:"Kristel",s:drop("/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3")},
+ {t:"Nienke",s:drop("/scl/fi/d71wygnuie878z027h59b/Nienke.mp3")},
+ {t:"Sascha",s:drop("/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3")},
+ {t:"Tamara",s:drop("/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3")},
+ {t:"Jolanda",s:drop("/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3")}
 ];
 
-  // =========================
-  // 2) Tracknaam automatisch uit bestandsnaam halen
-  // =========================
-  function titleFromUrl(url) {
-    const clean = url.split("?")[0];
-    const filename = clean.substring(clean.lastIndexOf("/") + 1);
-    const decoded = decodeURIComponent(filename);
+// -------- PLAYER --------
+const player=document.getElementById("player");
+const list=document.getElementById("list");
+const now=document.getElementById("nowPlaying");
+const btnM=document.getElementById("btnMannen");
+const btnV=document.getElementById("btnVrouwen");
+let tracks=mannenStemmen, index=-1;
 
-    return decoded
-      .replace(/\.(mp3|wav|m4a|aac|flac)$/i, "")
-      .replace(/_/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
+function render(){
+ list.innerHTML="";
+ tracks.forEach((x,i)=>{
+  const li=document.createElement("li");
+  li.textContent=x.t;
+  if(i===index) li.classList.add("active");
+  li.onclick=()=>play(i);
+  list.appendChild(li);
+ });
+}
+function play(i){
+ index=i;
+ player.src=tracks[i].s;
+ player.play();
+ now.textContent="Nu speelt: "+tracks[i].t;
+ render();
+}
+player.onended=()=>{if(index+1<tracks.length)play(index+1);};
 
-  const TRACK_GROUPS = [
-    { id: "men", title: "Mannenstemmen", links: MEN_LINKS },
-    { id: "women", title: "Vrouwenstemmen", links: WOMEN_LINKS },
-  ].map(g => ({
-    ...g,
-    tracks: g.links.map(u => ({ title: titleFromUrl(u), file: u }))
-  }));
+btnM.onclick=()=>{btnM.classList.add("active");btnV.classList.remove("active");tracks=mannenStemmen;index=-1;now.textContent="Kies een stem";player.src="";render();};
+btnV.onclick=()=>{btnV.classList.add("active");btnM.classList.remove("active");tracks=vrouwenStemmen;index=-1;now.textContent="Kies een stem";player.src="";render();};
 
-  // =========================
-  // 3) Player maken (downloads verbergen waar mogelijk)
-  // =========================
-  function makeAudio(src) {
-    const a = document.createElement("audio");
-    a.controls = true;
-    a.preload = "none";
-    a.src = src;
-    a.setAttribute("controlsList", "nodownload noplaybackrate");
-    a.setAttribute("disablePictureInPicture", "true");
-    a.draggable = false;
-    return a;
-  }
+document.getElementById("play").onclick=()=>player.play();
+document.getElementById("pause").onclick=()=>player.pause();
+document.getElementById("prev").onclick=()=>{if(index>0)play(index-1);};
+document.getElementById("next").onclick=()=>{if(index+1<tracks.length)play(index+1);};
 
-  const listEl = document.getElementById("list");
-  const qEl = document.getElementById("q");
-  const sortEl = document.getElementById("sort");
-  const stopBtn = document.getElementById("stopAll");
-
-  function render() {
-    const q = qEl.value.trim().toLowerCase();
-    const sort = sortEl.value;
-
-    listEl.innerHTML = "";
-
-    TRACK_GROUPS.forEach(group => {
-      let items = group.tracks.filter(t => t.title.toLowerCase().includes(q));
-      items.sort((a,b) => sort === "az"
-        ? a.title.localeCompare(b.title)
-        : b.title.localeCompare(a.title)
-      );
-
-      const container = document.createElement("section");
-      container.className = "group";
-
-      const h = document.createElement("h2");
-      h.textContent = `${group.title} (${items.length})`;
-      container.appendChild(h);
-
-      if (items.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "empty";
-        empty.textContent = "Geen resultaten in deze sectie.";
-        container.appendChild(empty);
-        listEl.appendChild(container);
-        return;
-      }
-
-      const itemsEl = document.createElement("div");
-      itemsEl.className = "items";
-
-      items.forEach(t => {
-        const row = document.createElement("div");
-        row.className = "item";
-
-        const left = document.createElement("div");
-        left.className = "left";
-
-        const title = document.createElement("div");
-        title.className = "title";
-        title.textContent = t.title;
-
-        const sub = document.createElement("div");
-        sub.className = "sub";
-        sub.textContent = ""; // Laat leeg (geen URL tonen)
-
-        left.appendChild(title);
-        left.appendChild(sub);
-
-        const audio = makeAudio(t.file);
-
-        // Stop andere tracks wanneer je deze start
-        audio.addEventListener("play", () => {
-          document.querySelectorAll("audio").forEach(other => {
-            if (other !== audio) other.pause();
-          });
-        });
-
-        row.appendChild(left);
-        row.appendChild(audio);
-        itemsEl.appendChild(row);
-      });
-
-      container.appendChild(itemsEl);
-      listEl.appendChild(container);
-    });
-  }
-
-  // Anti-download discouragement (geen garantie)
-  document.addEventListener("contextmenu", e => e.preventDefault());
-  document.addEventListener("dragstart", e => e.preventDefault());
-
-  qEl.addEventListener("input", render);
-  sortEl.addEventListener("change", render);
-
-  stopBtn.addEventListener("click", () => {
-    document.querySelectorAll("audio").forEach(a => { a.pause(); a.currentTime = 0; });
-  });
-
-  render();
+render();
 </script>
 
 </body>
 </html>
-```
