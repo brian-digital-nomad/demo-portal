@@ -1,7 +1,7 @@
-# Stemmen Portal – BrandingTotaal
+# Stemmen Portal – BrandingTotaal ©
 
-Dit project is een eenvoudige web-player voor het beluisteren van voice-over demo’s
-(mannen- en vrouwenstemmen), gehost via **GitHub Pages** en met audio vanuit **Dropbox**.
+Dit is eenn platform voor het beluisteren van voice-over demo’s
+(mannen- en vrouwenstemmen)
 
 De portal is mobiel-vriendelijk en bedoeld als demo/preview voor klanten.
 
