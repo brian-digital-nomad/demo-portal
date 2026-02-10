@@ -180,32 +180,45 @@ const vrouwenStemmen = [
 const player=document.getElementById("player");
 const now=document.getElementById("nowPlaying");
 
-function build(list,el){
+function build(list, el){
   list.forEach(v=>{
-    const li=document.createElement("li");
-    li.textContent=v.t;
-    li.onclick=()=>{
+    const li = document.createElement("li");
+
+    const left = document.createElement("div");
+    left.style.display = "flex";
+    left.style.alignItems = "center";
+
+    const dot = document.createElement("span");
+    dot.className = "dot"; // <-- dit is de bol
+
+    const name = document.createElement("span");
+    name.textContent = v.t;
+
+    left.appendChild(dot);
+    left.appendChild(name);
+    li.appendChild(left);
+
+    li.onclick = ()=>{
+      // reset alles
+      document.querySelectorAll(".dot").forEach(d=>{
+        d.classList.remove("playing");
+        d.style.display = "none";
+      });
       document.querySelectorAll("li").forEach(x=>x.classList.remove("active"));
+
+      // active
       li.classList.add("active");
-      player.src=toDirect(v.s);
+      dot.classList.add("playing");
+      dot.style.display = "inline-block";
+
+      player.src = toDirect(v.s);
       player.play();
-      now.innerHTML="<b>Nu:</b> "+v.t;
+      now.innerHTML = "<b>Nu:</b> " + v.t;
     };
+
     el.appendChild(li);
   });
 }
-
-build(mannenStemmen,document.getElementById("mannen"));
-build(vrouwenStemmen,document.getElementById("vrouwen"));
-  function stopDots(){
-  document.querySelectorAll(".dot").forEach(d=>{
-    d.classList.remove("playing");
-    d.style.display = "none";
-  });
-}
-
-player.addEventListener("pause", stopDots);
-player.addEventListener("ended", stopDots);
 
 </script>
 
