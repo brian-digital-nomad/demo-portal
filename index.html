@@ -181,6 +181,7 @@ const vrouwenStemmen = [
 const player = document.getElementById("player");
 const now = document.getElementById("nowPlaying");
 
+  <script>
 function build(list, el){
   list.forEach(v=>{
     const li = document.createElement("li");
@@ -233,8 +234,6 @@ function stopDots(){
 }
 player.addEventListener("pause", stopDots);
 player.addEventListener("ended", stopDots);
-</script>
-
 </script>
 
 </body>
