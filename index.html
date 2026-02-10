@@ -6,6 +6,26 @@
 <title>BrandingTotaal – Stemmen</title>
 
 <style>
+  /* 🔴 Knipperend afspeel-bolletje */
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ef4444;
+  margin-right:8px;
+  display:none;
+}
+
+.dot.playing{
+  display:inline-block;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:.25}
+}
+
 :root{
   --bg:#0b1020;
   --panel:rgba(255,255,255,.06);
