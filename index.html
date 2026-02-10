@@ -132,6 +132,7 @@ footer{
 <footer>© BrandingTotaal</footer>
 
 <script>
+<script>
 function toDirect(url){
   url = url.replace("https://www.dropbox.com","https://dl.dropboxusercontent.com");
   const u = new URL(url);
@@ -177,8 +178,8 @@ const vrouwenStemmen = [
   {t:"Jolanda",s:"https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?rlkey=gxeexdlkjyn5fs09jular3lis&st=a1alt0yb"}
 ];
 
-const player=document.getElementById("player");
-const now=document.getElementById("nowPlaying");
+const player = document.getElementById("player");
+const now = document.getElementById("nowPlaying");
 
 function build(list, el){
   list.forEach(v=>{
@@ -189,7 +190,7 @@ function build(list, el){
     left.style.alignItems = "center";
 
     const dot = document.createElement("span");
-    dot.className = "dot"; // <-- dit is de bol
+    dot.className = "dot";
 
     const name = document.createElement("span");
     name.textContent = v.t;
@@ -199,7 +200,7 @@ function build(list, el){
     li.appendChild(left);
 
     li.onclick = ()=>{
-      // reset alles
+      // reset bolletjes + active state
       document.querySelectorAll(".dot").forEach(d=>{
         d.classList.remove("playing");
         d.style.display = "none";
@@ -219,6 +220,20 @@ function build(list, el){
     el.appendChild(li);
   });
 }
+
+// ✅ DIT ONTBRAK BIJ JOU:
+build(mannenStemmen, document.getElementById("mannen"));
+build(vrouwenStemmen, document.getElementById("vrouwen"));
+
+function stopDots(){
+  document.querySelectorAll(".dot").forEach(d=>{
+    d.classList.remove("playing");
+    d.style.display = "none";
+  });
+}
+player.addEventListener("pause", stopDots);
+player.addEventListener("ended", stopDots);
+</script>
 
 </script>
 
