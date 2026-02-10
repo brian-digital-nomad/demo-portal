@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>BrandingTotaal – Stemmenbank</title>
+<title>BrandingTotaal – Stemmen</title>
 
 <style>
   :root{
@@ -28,7 +28,7 @@
     color:var(--text);
   }
 
-  /* ===== Header / Menu (sticky) ===== */
+  /* ===== Sticky header / menu ===== */
   .siteHeader{
     position:sticky;
     top:0;
@@ -68,47 +68,35 @@
   .nav a{
     color:rgba(232,238,252,.88);
     text-decoration:none;
-    font-weight:600;
+    font-weight:700;
     font-size:14px;
     letter-spacing:.2px;
     opacity:.9;
+    padding:8px 6px;
+    border-radius:10px;
   }
-  .nav a:hover{opacity:1}
+  .nav a:hover{opacity:1;background:rgba(255,255,255,.06)}
 
-  .cta{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:10px 14px;
-    border-radius:999px;
-    background:var(--btn);
-    color:var(--btnText);
-    text-decoration:none;
-    font-weight:800;
-    font-size:14px;
-    white-space:nowrap;
-    border:1px solid rgba(255,255,255,.14);
-  }
-  .cta:hover{filter:brightness(1.03)}
-
-  /* Dropdown "Diensten" */
+  /* Dropdown "Diensten" (alleen Home) */
   .drop{
     position:relative;
     display:inline-flex;
     align-items:center;
     gap:6px;
-    cursor:pointer;
     user-select:none;
   }
   .dropBtn{
     background:transparent;
     border:none;
     color:rgba(232,238,252,.88);
-    font-weight:700;
+    font-weight:800;
     font-size:14px;
     padding:8px 6px;
     cursor:pointer;
+    border-radius:10px;
+    opacity:.9;
   }
+  .dropBtn:hover{opacity:1;background:rgba(255,255,255,.06)}
   .caret{
     width:10px;height:10px;
     border-right:2px solid rgba(232,238,252,.7);
@@ -119,9 +107,9 @@
   }
   .menu{
     position:absolute;
-    top:40px;
+    top:42px;
     left:0;
-    min-width:260px;
+    min-width:220px;
     background:rgba(0,0,0,.82);
     border:1px solid rgba(255,255,255,.14);
     border-radius:14px;
@@ -133,9 +121,10 @@
     display:block;
     padding:10px 10px;
     border-radius:10px;
-    font-weight:650;
+    font-weight:700;
     font-size:14px;
-    color:rgba(232,238,252,.88);
+    color:rgba(232,238,252,.90);
+    text-decoration:none;
   }
   .menu a:hover{background:rgba(255,255,255,.06)}
   .drop.open .menu{display:block}
@@ -184,17 +173,10 @@
     border:1px solid rgba(255,255,255,.10);
     background:rgba(255,255,255,.06);
     color:rgba(232,238,252,.92);
-    font-weight:700;
+    font-weight:800;
     font-size:14px;
     cursor:pointer;
     text-decoration:none;
-  }
-  .mobilePanel a.ctaMobile{
-    background:var(--btn);
-    color:var(--btnText);
-    border:none;
-    text-align:center;
-    font-weight:900;
   }
   .mobileSub{
     display:none;
@@ -203,10 +185,9 @@
   }
   .mobileSub a{
     background:rgba(255,255,255,.04);
-    font-weight:650;
+    font-weight:700;
   }
   .mobilePanel.open{display:block}
-  .mobilePanel .dienstenOpen + .mobileSub{display:grid}
 
   @media(max-width:980px){
     .nav{display:none}
@@ -245,7 +226,8 @@
     gap:10px;
     flex-wrap:wrap;
   }
-  .status b{color:var(--text);font-weight:750}
+  .status b{color:var(--text);font-weight:800}
+  .tag{color:var(--muted);font-size:12px}
 
   .grid{
     display:grid;
@@ -280,9 +262,8 @@
   li.active{background:rgba(56,189,248,.14)}
   .left{display:flex;align-items:center;gap:10px;min-width:0}
   .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .tag{color:var(--muted);font-size:12px;flex:0 0 auto}
 
-  /* 🔴 Bolletje: alleen zichtbaar bij afspelen/selectie (blijft bij pauze) */
+  /* 🔴 Bolletje: zichtbaar + knipper bij geselecteerde (blijft bij pauze) */
   .dot{
     width:10px;
     height:10px;
@@ -306,6 +287,25 @@
     color:var(--muted);
     font-size:13px;
   }
+  .waFooter{
+    margin-top:10px;
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    padding:12px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:rgba(232,238,252,.9);
+    text-decoration:none;
+    font-weight:900;
+  }
+  .waDot{
+    width:10px;height:10px;border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.15);
+  }
 </style>
 </head>
 
@@ -323,24 +323,15 @@
       <!-- Desktop nav -->
       <nav class="nav" aria-label="Hoofdmenu">
         <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
-        <a href="https://brandingtotaal.nl/over-ons/" target="_blank" rel="noopener">Over ons</a>
 
+        <!-- Diensten dropdown, maar alleen Home tonen -->
         <div class="drop" id="drop">
           <button class="dropBtn" type="button" id="dropBtn">Diensten</button>
           <span class="caret" aria-hidden="true"></span>
           <div class="menu" role="menu" aria-label="Diensten">
-            <a role="menuitem" href="https://brandingtotaal.nl/website-laten-maken/" target="_blank" rel="noopener">Website laten maken</a>
-            <a role="menuitem" href="https://brandingtotaal.nl/logo-laten-maken/" target="_blank" rel="noopener">Logo laten maken</a>
-            <a role="menuitem" href="https://brandingtotaal.nl/merknaam-bedenken/" target="_blank" rel="noopener">Merknaam bedenken</a>
-            <a role="menuitem" href="https://brandingtotaal.nl/ai-chatbot/" target="_blank" rel="noopener">AI Chatbot</a>
-            <a role="menuitem" href="https://brandingtotaal.nl/online-marketing/" target="_blank" rel="noopener">Online Marketing</a>
-            <a role="menuitem" href="https://brandingtotaal.nl/telecommunicatie/" target="_blank" rel="noopener">Zakelijke Telefonie</a>
+            <a role="menuitem" href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
           </div>
         </div>
-
-        <a href="https://brandingtotaal.nl/blog/" target="_blank" rel="noopener">Blog</a>
-        <a href="https://brandingtotaal.nl/contact/" target="_blank" rel="noopener">Contact</a>
-        <a class="cta" href="https://wa.me/" target="_blank" rel="noopener">Afspraak maken!</a>
       </nav>
 
       <!-- Mobile burger -->
@@ -355,21 +346,11 @@
     <div class="mobilePanel" id="mobilePanel">
       <div class="inner">
         <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
-        <a href="https://brandingtotaal.nl/over-ons/" target="_blank" rel="noopener">Over ons</a>
 
-        <button class="dienstenOpen" id="dienstenOpen" type="button">Diensten ▾</button>
+        <button id="dienstenOpen" type="button">Diensten ▾</button>
         <div class="mobileSub" id="mobileSub">
-          <a href="https://brandingtotaal.nl/website-laten-maken/" target="_blank" rel="noopener">Website laten maken</a>
-          <a href="https://brandingtotaal.nl/logo-laten-maken/" target="_blank" rel="noopener">Logo laten maken</a>
-          <a href="https://brandingtotaal.nl/merknaam-bedenken/" target="_blank" rel="noopener">Merknaam bedenken</a>
-          <a href="https://brandingtotaal.nl/ai-chatbot/" target="_blank" rel="noopener">AI Chatbot</a>
-          <a href="https://brandingtotaal.nl/online-marketing/" target="_blank" rel="noopener">Online Marketing</a>
-          <a href="https://brandingtotaal.nl/telecommunicatie/" target="_blank" rel="noopener">Zakelijke Telefonie</a>
+          <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
         </div>
-
-        <a href="https://brandingtotaal.nl/blog/" target="_blank" rel="noopener">Blog</a>
-        <a href="https://brandingtotaal.nl/contact/" target="_blank" rel="noopener">Contact</a>
-        <a class="ctaMobile" href="https://wa.me/" target="_blank" rel="noopener">Afspraak maken!</a>
       </div>
     </div>
   </header>
@@ -403,7 +384,15 @@
     </div>
   </main>
 
-  <footer>Powered By BrandingTotaal.nl – 2026 © All rights reserved</footer>
+  <footer>
+    © BrandingTotaal
+    <div style="margin-top:12px">
+      <a class="waFooter" href="https://wa.me/31616656560" target="_blank" rel="noopener">
+        <span class="waDot" aria-hidden="true"></span>
+        Afspraak maken via WhatsApp: 06 16656560
+      </a>
+    </div>
+  </footer>
 
 <script>
 /* ===== Header interactions ===== */
@@ -413,24 +402,20 @@
   const burger = document.getElementById("burger");
   const mobilePanel = document.getElementById("mobilePanel");
   const dienstenOpen = document.getElementById("dienstenOpen");
+  const mobileSub = document.getElementById("mobileSub");
 
-  if(drop && dropBtn){
-    dropBtn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      drop.classList.toggle("open");
-    });
-    document.addEventListener("click", ()=> drop.classList.remove("open"));
-  }
+  dropBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    drop.classList.toggle("open");
+  });
+  document.addEventListener("click", ()=> drop.classList.remove("open"));
 
   burger.addEventListener("click", ()=>{
     mobilePanel.classList.toggle("open");
   });
 
   dienstenOpen.addEventListener("click", ()=>{
-    dienstenOpen.classList.toggle("dienstenOpen");
-    const sub = document.getElementById("mobileSub");
-    // simpele toggle via display
-    sub.style.display = (sub.style.display === "grid") ? "none" : "grid";
+    mobileSub.style.display = (mobileSub.style.display === "grid") ? "none" : "grid";
   });
 })();
 
@@ -441,7 +426,6 @@ function toDirect(url){
   url = url.replace("http://www.dropbox.com","https://dl.dropboxusercontent.com");
   try{
     const u = new URL(url);
-    // laat rlkey/st staan; haal dl/raw weg
     u.searchParams.delete("dl");
     u.searchParams.delete("raw");
     return u.toString();
@@ -492,8 +476,6 @@ const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 const techInfo = document.getElementById("techInfo");
 
-let currentDot = null;
-
 function clearAllDots(){
   document.querySelectorAll(".dot").forEach(d=>{
     d.classList.remove("playing");
@@ -528,14 +510,12 @@ function buildList(items, elId){
     li.appendChild(right);
 
     li.onclick = ()=>{
-      // reset bij nieuwe keuze
       clearAllDots();
       document.querySelectorAll("li").forEach(x => x.classList.remove("active"));
 
       li.classList.add("active");
-      currentDot = dot;
-      currentDot.classList.add("playing");
-      currentDot.style.display = "inline-block";
+      dot.classList.add("playing");
+      dot.style.display = "inline-block";
 
       techInfo.textContent = "Laden…";
       nowPlaying.innerHTML = "<b>Nu:</b> " + item.t;
@@ -564,7 +544,6 @@ player.addEventListener("canplay", ()=> techInfo.textContent = "Gereed");
 player.addEventListener("ended", ()=>{
   techInfo.textContent = "Klaar";
   clearAllDots();
-  currentDot = null;
 });
 
 // init
@@ -573,4 +552,3 @@ buildList(vrouwenStemmen, "vrouwen");
 </script>
 </body>
 </html>
-
