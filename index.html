@@ -1,239 +1,575 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BrandingTotaal – Stemmen</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Branding Totaal – Stemmenbank</title>
 
 <style>
-  /* 🔴 Knipperend afspeel-bolletje */
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#ef4444;
-  margin-right:8px;
-  display:none;
-}
+  :root{
+    --bg:#0b1020;
+    --panel:rgba(255,255,255,.06);
+    --line:rgba(255,255,255,.12);
+    --text:#e8eefc;
+    --muted:rgba(232,238,252,.70);
+    --accent:#38bdf8;
+    --radius:16px;
+    --btn:#38bdf8;
+    --btnText:#071018;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(900px 600px at 25% -10%, rgba(56,189,248,.18), transparent 60%),
+      radial-gradient(700px 500px at 85% 10%, rgba(34,197,94,.10), transparent 55%),
+      var(--bg);
+    color:var(--text);
+  }
 
-.dot.playing{
-  display:inline-block;
-  animation:blink 1s infinite;
-}
+  /* ===== Header / Menu (sticky) ===== */
+  .siteHeader{
+    position:sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter: blur(12px);
+    background:rgba(0,0,0,.35);
+    border-bottom:1px solid var(--line);
+  }
+  .navWrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:var(--text);
+    min-width:0;
+  }
+  .brand img{
+    width:190px;
+    height:auto;
+    display:block;
+  }
 
-@keyframes blink{
-  0%,100%{opacity:1}
-  50%{opacity:.25}
-}
+  .nav{
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+  .nav a{
+    color:rgba(232,238,252,.88);
+    text-decoration:none;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:.2px;
+    opacity:.9;
+  }
+  .nav a:hover{opacity:1}
 
-:root{
-  --bg:#0b1020;
-  --panel:rgba(255,255,255,.06);
-  --line:rgba(255,255,255,.12);
-  --text:#e8eefc;
-  --muted:rgba(232,238,252,.7);
-  --accent:#38bdf8;
-  --radius:16px;
-}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-header{
-  padding:14px;
-  text-align:center;
-  border-bottom:1px solid var(--line);
-}
-header img{max-width:220px}
-main{
-  max-width:1000px;
-  margin:auto;
-  padding:16px;
-}
-.card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:16px;
-}
-audio{width:100%;margin-top:10px}
-.grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-  margin-top:20px;
-}
-@media(min-width:900px){
-  .grid{grid-template-columns:1fr 1fr}
-}
-ul{
-  list-style:none;
-  padding:0;margin:0;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-}
-li{
-  padding:12px 14px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  cursor:pointer;
-}
-li:last-child{border-bottom:none}
-li:hover{background:rgba(255,255,255,.06)}
-li.active{background:rgba(56,189,248,.15)}
-footer{
-  text-align:center;
-  padding:20px;
-  color:var(--muted);
-  font-size:13px;
-}
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 14px;
+    border-radius:999px;
+    background:var(--btn);
+    color:var(--btnText);
+    text-decoration:none;
+    font-weight:800;
+    font-size:14px;
+    white-space:nowrap;
+    border:1px solid rgba(255,255,255,.14);
+  }
+  .cta:hover{filter:brightness(1.03)}
+
+  /* Dropdown "Diensten" */
+  .drop{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .dropBtn{
+    background:transparent;
+    border:none;
+    color:rgba(232,238,252,.88);
+    font-weight:700;
+    font-size:14px;
+    padding:8px 6px;
+    cursor:pointer;
+  }
+  .caret{
+    width:10px;height:10px;
+    border-right:2px solid rgba(232,238,252,.7);
+    border-bottom:2px solid rgba(232,238,252,.7);
+    transform:rotate(45deg);
+    margin-top:-2px;
+    opacity:.9;
+  }
+  .menu{
+    position:absolute;
+    top:40px;
+    left:0;
+    min-width:260px;
+    background:rgba(0,0,0,.82);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:14px;
+    padding:8px;
+    display:none;
+    box-shadow:0 18px 40px rgba(0,0,0,.45);
+  }
+  .menu a{
+    display:block;
+    padding:10px 10px;
+    border-radius:10px;
+    font-weight:650;
+    font-size:14px;
+    color:rgba(232,238,252,.88);
+  }
+  .menu a:hover{background:rgba(255,255,255,.06)}
+  .drop.open .menu{display:block}
+
+  /* Mobile */
+  .burger{
+    display:none;
+    width:42px;height:42px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .burgerLines{
+    width:18px;height:12px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .burgerLines span{
+    display:block;
+    height:2px;
+    background:rgba(232,238,252,.85);
+    border-radius:99px;
+  }
+
+  .mobilePanel{
+    display:none;
+    border-top:1px solid rgba(255,255,255,.10);
+    background:rgba(0,0,0,.55);
+  }
+  .mobilePanel .inner{
+    max-width:1200px;
+    margin:0 auto;
+    padding:12px 14px 16px;
+    display:grid;
+    gap:10px;
+  }
+  .mobilePanel a, .mobilePanel button{
+    width:100%;
+    text-align:left;
+    padding:12px 12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.06);
+    color:rgba(232,238,252,.92);
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .mobilePanel a.ctaMobile{
+    background:var(--btn);
+    color:var(--btnText);
+    border:none;
+    text-align:center;
+    font-weight:900;
+  }
+  .mobileSub{
+    display:none;
+    gap:8px;
+    padding-left:10px;
+  }
+  .mobileSub a{
+    background:rgba(255,255,255,.04);
+    font-weight:650;
+  }
+  .mobilePanel.open{display:block}
+  .mobilePanel .dienstenOpen + .mobileSub{display:grid}
+
+  @media(max-width:980px){
+    .nav{display:none}
+    .burger{display:inline-flex;align-items:center;justify-content:center}
+    .brand img{width:170px}
+  }
+
+  /* ===== Page content ===== */
+  main{
+    max-width:980px;
+    margin:0 auto;
+    padding:18px 12px 26px;
+  }
+  h1{margin:14px 0 6px;font-size:22px;letter-spacing:.2px}
+  .hint{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.35}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+  }
+  audio{width:100%;margin-top:10px}
+
+  .status{
+    margin-top:10px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(0,0,0,.20);
+    color:var(--muted);
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .status b{color:var(--text);font-weight:750}
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    margin-top:14px;
+  }
+  @media(min-width:900px){ .grid{grid-template-columns:1fr 1fr} }
+
+  h2{margin:0 0 10px;font-size:16px;color:rgba(232,238,252,.86)}
+  ul{
+    list-style:none;
+    padding:0;margin:0;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:rgba(0,0,0,.18);
+  }
+  li{
+    padding:12px 14px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    -webkit-tap-highlight-color: transparent;
+    user-select:none;
+  }
+  li:last-child{border-bottom:none}
+  li:hover{background:rgba(255,255,255,.06)}
+  li.active{background:rgba(56,189,248,.14)}
+  .left{display:flex;align-items:center;gap:10px;min-width:0}
+  .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tag{color:var(--muted);font-size:12px;flex:0 0 auto}
+
+  /* 🔴 Bolletje: alleen zichtbaar bij afspelen/selectie (blijft bij pauze) */
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#ef4444;
+    display:none;
+    flex:0 0 auto;
+  }
+  .dot.playing{
+    display:inline-block;
+    animation:blink 1s infinite;
+  }
+  @keyframes blink{
+    0%,100%{opacity:1}
+    50%{opacity:.25}
+  }
+
+  footer{
+    text-align:center;
+    padding:18px 12px 26px;
+    color:var(--muted);
+    font-size:13px;
+  }
 </style>
 </head>
 
 <body>
+  <!-- Sticky header -->
+  <header class="siteHeader">
+    <div class="navWrap">
+      <a class="brand" href="https://brandingtotaal.nl" target="_blank" rel="noopener">
+        <img
+          src="https://dl.dropboxusercontent.com/scl/fi/duhfszbna6gp47e27fim1/Branding-Totaal-logo-button-mouse-2025-white-text-R.png?rlkey=qqfgg0ehi63hvy4p3ioisjg9t"
+          alt="BrandingTotaal"
+        />
+      </a>
 
-<header>
-  <img src="https://dl.dropboxusercontent.com/scl/fi/duhfszbna6gp47e27fim1/Branding-Totaal-logo-button-mouse-2025-white-text-R.png?rlkey=qqfgg0ehi63hvy4p3ioisjg9t">
-</header>
+      <!-- Desktop nav -->
+      <nav class="nav" aria-label="Hoofdmenu">
+        <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
+        <a href="https://brandingtotaal.nl/over-ons/" target="_blank" rel="noopener">Over ons</a>
 
-<main>
-<h1>Kies een stem</h1>
-<p style="color:var(--muted)">Klik op een naam om af te spelen. Downloaden is uitgeschakeld.</p>
+        <div class="drop" id="drop">
+          <button class="dropBtn" type="button" id="dropBtn">Diensten</button>
+          <span class="caret" aria-hidden="true"></span>
+          <div class="menu" role="menu" aria-label="Diensten">
+            <a role="menuitem" href="https://brandingtotaal.nl/website-laten-maken/" target="_blank" rel="noopener">Website laten maken</a>
+            <a role="menuitem" href="https://brandingtotaal.nl/logo-laten-maken/" target="_blank" rel="noopener">Logo laten maken</a>
+            <a role="menuitem" href="https://brandingtotaal.nl/merknaam-bedenken/" target="_blank" rel="noopener">Merknaam bedenken</a>
+            <a role="menuitem" href="https://brandingtotaal.nl/ai-chatbot/" target="_blank" rel="noopener">AI Chatbot</a>
+            <a role="menuitem" href="https://brandingtotaal.nl/online-marketing/" target="_blank" rel="noopener">Online Marketing</a>
+            <a role="menuitem" href="https://brandingtotaal.nl/telecommunicatie/" target="_blank" rel="noopener">Zakelijke Telefonie</a>
+          </div>
+        </div>
 
-<div class="card">
-  <audio id="player" controls></audio>
-  <div class="vu-wrap" id="vu">
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-  <div class="vu-bar"></div>
-</div>
+        <a href="https://brandingtotaal.nl/blog/" target="_blank" rel="noopener">Blog</a>
+        <a href="https://brandingtotaal.nl/contact/" target="_blank" rel="noopener">Contact</a>
+        <a class="cta" href="https://wa.me/" target="_blank" rel="noopener">Afspraak maken!</a>
+      </nav>
 
-  <div id="nowPlaying" style="margin-top:10px"><b>Kies een stem…</b></div>
-</div>
+      <!-- Mobile burger -->
+      <button class="burger" id="burger" type="button" aria-label="Menu openen">
+        <div class="burgerLines" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </button>
+    </div>
 
-<div class="grid">
-<section>
-<h2>Mannenstemmen</h2>
-<ul id="mannen"></ul>
-</section>
+    <!-- Mobile panel -->
+    <div class="mobilePanel" id="mobilePanel">
+      <div class="inner">
+        <a href="https://brandingtotaal.nl" target="_blank" rel="noopener">Home</a>
+        <a href="https://brandingtotaal.nl/over-ons/" target="_blank" rel="noopener">Over ons</a>
 
-<section>
-<h2>Vrouwenstemmen</h2>
-<ul id="vrouwen"></ul>
-</section>
-</div>
-</main>
+        <button class="dienstenOpen" id="dienstenOpen" type="button">Diensten ▾</button>
+        <div class="mobileSub" id="mobileSub">
+          <a href="https://brandingtotaal.nl/website-laten-maken/" target="_blank" rel="noopener">Website laten maken</a>
+          <a href="https://brandingtotaal.nl/logo-laten-maken/" target="_blank" rel="noopener">Logo laten maken</a>
+          <a href="https://brandingtotaal.nl/merknaam-bedenken/" target="_blank" rel="noopener">Merknaam bedenken</a>
+          <a href="https://brandingtotaal.nl/ai-chatbot/" target="_blank" rel="noopener">AI Chatbot</a>
+          <a href="https://brandingtotaal.nl/online-marketing/" target="_blank" rel="noopener">Online Marketing</a>
+          <a href="https://brandingtotaal.nl/telecommunicatie/" target="_blank" rel="noopener">Zakelijke Telefonie</a>
+        </div>
 
-<footer>© BrandingTotaal</footer>
+        <a href="https://brandingtotaal.nl/blog/" target="_blank" rel="noopener">Blog</a>
+        <a href="https://brandingtotaal.nl/contact/" target="_blank" rel="noopener">Contact</a>
+        <a class="ctaMobile" href="https://wa.me/" target="_blank" rel="noopener">Afspraak maken!</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page -->
+  <main>
+    <h1>Kies een stem</h1>
+    <p class="hint">
+      Tik op een naam om af te spelen. iPhone/Safari kan autoplay blokkeren: druk dan op ▶︎ in de player.
+    </p>
+
+    <div class="card">
+      <audio id="player" controls preload="none"></audio>
+
+      <div class="status">
+        <span id="nowPlaying"><b>Kies een stem…</b></span>
+        <span id="techInfo" class="tag"></span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <h2>Mannenstemmen</h2>
+        <ul id="mannen"></ul>
+      </section>
+
+      <section>
+        <h2>Vrouwenstemmen</h2>
+        <ul id="vrouwen"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>Powered By BrandingTotaal.nl – 2026 © All rights reserved</footer>
 
 <script>
+/* ===== Header interactions ===== */
+(function(){
+  const drop = document.getElementById("drop");
+  const dropBtn = document.getElementById("dropBtn");
+  const burger = document.getElementById("burger");
+  const mobilePanel = document.getElementById("mobilePanel");
+  const dienstenOpen = document.getElementById("dienstenOpen");
+
+  if(drop && dropBtn){
+    dropBtn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      drop.classList.toggle("open");
+    });
+    document.addEventListener("click", ()=> drop.classList.remove("open"));
+  }
+
+  burger.addEventListener("click", ()=>{
+    mobilePanel.classList.toggle("open");
+  });
+
+  dienstenOpen.addEventListener("click", ()=>{
+    dienstenOpen.classList.toggle("dienstenOpen");
+    const sub = document.getElementById("mobileSub");
+    // simpele toggle via display
+    sub.style.display = (sub.style.display === "grid") ? "none" : "grid";
+  });
+})();
+
+/* ===== Audio page ===== */
 function toDirect(url){
+  if(!url) return url;
   url = url.replace("https://www.dropbox.com","https://dl.dropboxusercontent.com");
-  const u = new URL(url);
-  u.searchParams.delete("dl");
-  return u.toString();
+  url = url.replace("http://www.dropbox.com","https://dl.dropboxusercontent.com");
+  try{
+    const u = new URL(url);
+    // laat rlkey/st staan; haal dl/raw weg
+    u.searchParams.delete("dl");
+    u.searchParams.delete("raw");
+    return u.toString();
+  }catch(e){
+    return url;
+  }
 }
 
 const mannenStemmen = [
-  {t:"Ad",s:"https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?rlkey=208bf0ujvg5mkrcmm47b0d5sk&st=jn5fd56b"},
-  {t:"Albert-Jan",s:"https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?rlkey=kt14f25ibsrhj1f828zpig22i&st=temwoq0y"},
-  {t:"Bart (België)",s:"https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?rlkey=jpba3bq2x5xpao9tw6edo42f6&st=09phyx9l"},
-  {t:"Bas",s:"https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?rlkey=9du5yknvio6lwcq4p75dfaw4l&st=qawp8s7x"},
-  {t:"Dave",s:"https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?rlkey=y6ixvwrwtvjsdqevduj5yerzy&st=yuatifx6"},
-  {t:"Erik-Jan",s:"https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?rlkey=p0vx22c3qzynn2ficd74tafz4&st=b6owtt5d"},
-  {t:"Eelco",s:"https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?rlkey=c99z2bdtzafe26t7gukdd1u7p&st=qdlduxho"},
-  {t:"Gerard",s:"https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?rlkey=sf5tj7nwmaec77yphtopvsozr&st=kq3ao2yj"},
-  {t:"Gijs",s:"https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?rlkey=myxkg3kiskjosoxe7af0dcgd8&st=slf55r5j"},
-  {t:"Karel",s:"https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?rlkey=xpf9n29t0gy3r3q18pb9an9g2&st=23b54kbk"},
-  {t:"Koen",s:"https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?rlkey=duo44e0eucsdrbiqq6mycpuux&st=37k17m37"},
-  {t:"Lex",s:"https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?rlkey=7bw181q8ashkt8o5jnvf6n8um&st=0ewpank7"},
-  {t:"Marc",s:"https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?rlkey=508v1nqskmr2xzibnyyo2e33v&st=y7yjxkkc"},
-  {t:"Martin",s:"https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?rlkey=71nvaw05wy7kej813ip2e9vce&st=li6cj6px"},
-  {t:"Marcel",s:"https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?rlkey=1xydhq97li13m2uz5j9hd6a54&st=d0x143px"},
-  {t:"Maurice",s:"https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?rlkey=yp08zifcdv3qboczyceg4pfjz&st=d1r1pp8h"},
-  {t:"Melvin",s:"https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?rlkey=vrlksuvzgamp3v9imoq1ah47d&st=jj7551xn"},
-  {t:"Paul",s:"https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?rlkey=zh9eokfhgh3w24i1c3rfp0qec&st=i72expi5"},
-  {t:"René",s:"https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?rlkey=1c9cvo4rn44tp3s7a7bp6y2gd&st=fsbgukio"},
-  {t:"Rick",s:"https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?rlkey=c1usybhzlhnipzcwy1tjv0jye&st=opt2600z"},
-  {t:"Stefan",s:"https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?rlkey=v9mdw6aaev0d653pldux5e7ea&st=fi36ihqq"},
-  {t:"USA Voice",s:"https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?rlkey=j0gv0p76exi7fuch5d8mzsfw7&st=zguhjx95"}
+  {t:"Ad",s:"https://www.dropbox.com/scl/fi/fivajivxwlow8emv3mqoh/Ad.mp3?rlkey=208bf0ujvg5mkrcmm47b0d5sk&st=jn5fd56b&dl=0"},
+  {t:"Albert-Jan",s:"https://www.dropbox.com/scl/fi/ju22759l2e5avksrymov0/Albert-jan.mp3?rlkey=kt14f25ibsrhj1f828zpig22i&st=temwoq0y&dl=0"},
+  {t:"Bart (België)",s:"https://www.dropbox.com/scl/fi/bigd9vxk3opvspbcc6128/Bart-Belgie.mp3?rlkey=jpba3bq2x5xpao9tw6edo42f6&st=09phyx9l&dl=0"},
+  {t:"Bas",s:"https://www.dropbox.com/scl/fi/k1gqidhyg1ghbvrxn9nfc/Bas.mp3?rlkey=9du5yknvio6lwcq4p75dfaw4l&st=qawp8s7x&dl=0"},
+  {t:"Dave",s:"https://www.dropbox.com/scl/fi/5yf00fwbnkmqh0tpbuhsn/Dave.mp3?rlkey=y6ixvwrwtvjsdqevduj5yerzy&st=yuatifx6&dl=0"},
+  {t:"Erik-Jan",s:"https://www.dropbox.com/scl/fi/on8tn4lz228zf54i4t920/Erik-Jan.mp3?rlkey=p0vx22c3qzynn2ficd74tafz4&st=b6owtt5d&dl=0"},
+  {t:"Eelco",s:"https://www.dropbox.com/scl/fi/hpuc6d69r6mh18fjkn51k/Eelco.mp3?rlkey=c99z2bdtzafe26t7gukdd1u7p&st=qdlduxho&dl=0"},
+  {t:"Gerard",s:"https://www.dropbox.com/scl/fi/1brhd6ulrky0cfraw3zv9/Gerard.mp3?rlkey=sf5tj7nwmaec77yphtopvsozr&st=kq3ao2yj&dl=0"},
+  {t:"Gijs",s:"https://www.dropbox.com/scl/fi/i9rbjzt6qoqv7v0srknw4/Gijs.mp3?rlkey=myxkg3kiskjosoxe7af0dcgd8&st=slf55r5j&dl=0"},
+  {t:"Karel",s:"https://www.dropbox.com/scl/fi/wpqz134op92t0jczxj2t4/Karel.mp3?rlkey=xpf9n29t0gy3r3q18pb9an9g2&st=23b54kbk&dl=0"},
+  {t:"Koen",s:"https://www.dropbox.com/scl/fi/m3jcu0xjl920ter039qk5/Koen.mp3?rlkey=duo44e0eucsdrbiqq6mycpuux&st=37k17m37&dl=0"},
+  {t:"Lex",s:"https://www.dropbox.com/scl/fi/cr4cjmgivzon1jy3wequr/Lex.mp3?rlkey=7bw181q8ashkt8o5jnvf6n8um&st=0ewpank7&dl=0"},
+  {t:"Marc",s:"https://www.dropbox.com/scl/fi/2dfqdkep02cmlt2gp7rf3/Marc.mp3?rlkey=508v1nqskmr2xzibnyyo2e33v&st=y7yjxkkc&dl=0"},
+  {t:"Martin",s:"https://www.dropbox.com/scl/fi/e3d1ivpvxob0sb59tjf39/Martin.mp3?rlkey=71nvaw05wy7kej813ip2e9vce&st=li6cj6px&dl=0"},
+  {t:"Marcel",s:"https://www.dropbox.com/scl/fi/ssmt05nyeypwiem8v075h/Marcel.mp3?rlkey=1xydhq97li13m2uz5j9hd6a54&st=d0x143px&dl=0"},
+  {t:"Maurice",s:"https://www.dropbox.com/scl/fi/5h12z3kafr3whzed9g60a/Maurice.mp3?rlkey=yp08zifcdv3qboczyceg4pfjz&st=d1r1pp8h&dl=0"},
+  {t:"Melvin",s:"https://www.dropbox.com/scl/fi/k8l2m2hj86xi4w66wia35/Melvin.mp3?rlkey=vrlksuvzgamp3v9imoq1ah47d&st=jj7551xn&dl=0"},
+  {t:"Paul",s:"https://www.dropbox.com/scl/fi/pdscooreovg93d2esk8sz/Paul.mp3?rlkey=zh9eokfhgh3w24i1c3rfp0qec&st=i72expi5&dl=0"},
+  {t:"René",s:"https://www.dropbox.com/scl/fi/nfi8a7u8ptcay3bdhvw4t/Rene.mp3?rlkey=1c9cvo4rn44tp3s7a7bp6y2gd&st=fsbgukio&dl=0"},
+  {t:"Rick",s:"https://www.dropbox.com/scl/fi/tx3obeai62hmmk9g88bto/Rick.mp3?rlkey=c1usybhzlhnipzcwy1tjv0jye&st=opt2600z&dl=0"},
+  {t:"Stefan",s:"https://www.dropbox.com/scl/fi/w4opwltootdzzky91rysa/Stefan.mp3?rlkey=v9mdw6aaev0d653pldux5e7ea&st=fi36ihqq&dl=0"},
+  {t:"USA Voice",s:"https://www.dropbox.com/scl/fi/ij3stmn2fqzihxy0cabae/USA-Voice.mp3?rlkey=j0gv0p76exi7fuch5d8mzsfw7&st=zguhjx95&dl=0"}
 ];
 
 const vrouwenStemmen = [
-  {t:"Romy",s:"https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?rlkey=k3qup0rpfr7ra5zwxwoknubju&st=k4n6twyp"},
-  {t:"Elvira",s:"https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?rlkey=0c6o39nru0ejg9vyx01t1g9yn&st=jrzkogu6"},
-  {t:"Femke",s:"https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?rlkey=euk2nun0z8g1tmmmsu0n0zcje&st=5posdw9v"},
-  {t:"Fleur",s:"https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?rlkey=z1dat7jn4rjybre9h5wyfa677&st=7dlqzysn"},
-  {t:"Jacqueline",s:"https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?rlkey=sm569t6vhx0dekymexxcy2gg1&st=k962c3wv"},
-  {t:"Kristel",s:"https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?rlkey=db3lpuw5yydxqijm3chwl0wrp&st=xw5oz9qi"},
-  {t:"Nienke",s:"https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?rlkey=fhi6rzxj0cr9pfv6knjlub4ev&st=lkccuoai"},
-  {t:"Sascha",s:"https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?rlkey=v6xm6aufmewx9k3cn9xd8fjn7&st=e333j50t"},
-  {t:"Tamara",s:"https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?rlkey=7y8w5yt6cw25hhpodjrr0d9oj&st=9sn89230"},
-  {t:"Jolanda",s:"https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?rlkey=gxeexdlkjyn5fs09jular3lis&st=a1alt0yb"}
+  {t:"Romy",s:"https://www.dropbox.com/scl/fi/8guub7l37mtu3spsodgap/Romy.mp3?rlkey=k3qup0rpfr7ra5zwxwoknubju&st=k4n6twyp&dl=0"},
+  {t:"Elvira",s:"https://www.dropbox.com/scl/fi/0j0675w25h4hmgakyal4f/Elvira.mp3?rlkey=0c6o39nru0ejg9vyx01t1g9yn&st=jrzkogu6&dl=0"},
+  {t:"Femke",s:"https://www.dropbox.com/scl/fi/il836vey8b1a1gzpzckub/Femke.mp3?rlkey=euk2nun0z8g1tmmmsu0n0zcje&st=5posdw9v&dl=0"},
+  {t:"Fleur",s:"https://www.dropbox.com/scl/fi/04sjlm6kb19oybncx45c2/Fleur.mp3?rlkey=z1dat7jn4rjybre9h5wyfa677&st=7dlqzysn&dl=0"},
+  {t:"Jacqueline",s:"https://www.dropbox.com/scl/fi/1fbpiq4oel79dnv24ofy9/Jacqueline.mp3?rlkey=sm569t6vhx0dekymexxcy2gg1&st=k962c3wv&dl=0"},
+  {t:"Kristel",s:"https://www.dropbox.com/scl/fi/jw1mm85zqcr2a61l00nn3/Kristel.mp3?rlkey=db3lpuw5yydxqijm3chwl0wrp&st=xw5oz9qi&dl=0"},
+  {t:"Nienke",s:"https://www.dropbox.com/scl/fi/d71wygnuie878z027h59b/Nienke.mp3?rlkey=fhi6rzxj0cr9pfv6knjlub4ev&st=lkccuoai&dl=0"},
+  {t:"Sascha",s:"https://www.dropbox.com/scl/fi/qnu6vfztbzrvyceo9iy1o/Sascha.mp3?rlkey=v6xm6aufmewx9k3cn9xd8fjn7&st=e333j50t&dl=0"},
+  {t:"Tamara",s:"https://www.dropbox.com/scl/fi/2p5y7hzfx3cuppbfgc64a/Tamara.mp3?rlkey=7y8w5yt6cw25hhpodjrr0d9oj&st=9sn89230&dl=0"},
+  {t:"Jolanda",s:"https://www.dropbox.com/scl/fi/yvyxi1ptzq0e3dg5est6p/Jolanda.mp3?rlkey=gxeexdlkjyn5fs09jular3lis&st=a1alt0yb&dl=0"}
 ];
 
 const player = document.getElementById("player");
-const now = document.getElementById("nowPlaying");
+const nowPlaying = document.getElementById("nowPlaying");
+const techInfo = document.getElementById("techInfo");
 
-</script>
-function build(list, el){
-  list.forEach(v=>{
-    const li = document.createElement("li");
+let currentDot = null;
 
-    const left = document.createElement("div");
-    left.style.display = "flex";
-    left.style.alignItems = "center";
-
-    const dot = document.createElement("span");
-    dot.className = "dot";
-
-    const name = document.createElement("span");
-    name.textContent = v.t;
-
-    left.appendChild(dot);
-    left.appendChild(name);
-    li.appendChild(left);
-
-    li.onclick = ()=>{
-      // reset bolletjes + active state
-      document.querySelectorAll(".dot").forEach(d=>{
-        d.classList.remove("playing");
-        d.style.display = "none";
-      });
-      document.querySelectorAll("li").forEach(x=>x.classList.remove("active"));
-
-      // active
-      li.classList.add("active");
-      dot.classList.add("playing");
-      dot.style.display = "inline-block";
-
-      player.src = toDirect(v.s);
-      player.play();
-      now.innerHTML = "<b>Nu:</b> " + v.t;
-    };
-
-    el.appendChild(li);
-  });
-}
-
-// ✅ DIT ONTBRAK BIJ JOU:
-build(mannenStemmen, document.getElementById("mannen"));
-build(vrouwenStemmen, document.getElementById("vrouwen"));
-
-function stopDots(){
+function clearAllDots(){
   document.querySelectorAll(".dot").forEach(d=>{
     d.classList.remove("playing");
     d.style.display = "none";
   });
 }
-player.addEventListener("pause", stopDots);
-player.addEventListener("ended", stopDots);
-</script>
 
+function buildList(items, elId){
+  const ul = document.getElementById(elId);
+  ul.innerHTML = "";
+  items.forEach(item=>{
+    const li = document.createElement("li");
+
+    const left = document.createElement("div");
+    left.className = "left";
+
+    const dot = document.createElement("span");
+    dot.className = "dot";
+
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = item.t;
+
+    left.appendChild(dot);
+    left.appendChild(name);
+
+    const right = document.createElement("span");
+    right.className = "tag";
+    right.textContent = "mp3";
+
+    li.appendChild(left);
+    li.appendChild(right);
+
+    li.onclick = ()=>{
+      // reset bij nieuwe keuze
+      clearAllDots();
+      document.querySelectorAll("li").forEach(x => x.classList.remove("active"));
+
+      li.classList.add("active");
+      currentDot = dot;
+      currentDot.classList.add("playing");
+      currentDot.style.display = "inline-block";
+
+      techInfo.textContent = "Laden…";
+      nowPlaying.innerHTML = "<b>Nu:</b> " + item.t;
+
+      player.pause();
+      player.currentTime = 0;
+      player.src = toDirect(item.s);
+
+      player.play().catch(() => {
+        techInfo.textContent = "Pauze";
+        nowPlaying.innerHTML = "<b>Nu:</b> " + item.t + " (druk op ▶︎)";
+      });
+    };
+
+    ul.appendChild(li);
+  });
+}
+
+// status
+player.addEventListener("playing", ()=> techInfo.textContent = "Afspelen");
+player.addEventListener("pause",   ()=> techInfo.textContent = "Pauze"); // dot blijft!
+player.addEventListener("waiting", ()=> techInfo.textContent = "Bufferen…");
+player.addEventListener("canplay", ()=> techInfo.textContent = "Gereed");
+
+// ✅ alleen bij einde dot weg
+player.addEventListener("ended", ()=>{
+  techInfo.textContent = "Klaar";
+  clearAllDots();
+  currentDot = null;
+});
+
+// init
+buildList(mannenStemmen, "mannen");
+buildList(vrouwenStemmen, "vrouwen");
+</script>
 </body>
 </html>
