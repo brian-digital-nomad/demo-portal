@@ -158,50 +158,6 @@ const vrouwenStemmen = [
 ];
 
 const player=document.getElementById("player");
-  const player = document.getElementById("player");
-const vu = document.getElementById("vu");
-const vuBars = document.querySelectorAll(".vu-bar");
-
-let audioCtx, analyser, source, dataArray;
-
-function initVU(){
-  if(audioCtx) return;
-
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 64;
-
-  source = audioCtx.createMediaElementSource(player);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-
-  dataArray = new Uint8Array(analyser.frequencyBinCount);
-}
-
-function updateVU(){
-  if(!analyser) return;
-
-  analyser.getByteFrequencyData(dataArray);
-
-  vuBars.forEach((bar,i)=>{
-    const value = dataArray[i * 2] || 0;
-    const height = Math.max(6, value / 4);
-    bar.style.height = height + "px";
-  });
-
-  requestAnimationFrame(updateVU);
-}
-
-player.addEventListener("play", ()=>{
-  initVU();
-  audioCtx.resume();
-  vu.style.display = "flex";
-  updateVU();
-});
-
-player.addEventListener("pause", ()=> vu.style.display="none");
-player.addEventListener("ended", ()=> vu.style.display="none");
-
 const now=document.getElementById("nowPlaying");
 
 function build(list,el){
