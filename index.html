@@ -197,6 +197,16 @@ function build(list,el){
 
 build(mannenStemmen,document.getElementById("mannen"));
 build(vrouwenStemmen,document.getElementById("vrouwen"));
+  function stopDots(){
+  document.querySelectorAll(".dot").forEach(d=>{
+    d.classList.remove("playing");
+    d.style.display = "none";
+  });
+}
+
+player.addEventListener("pause", stopDots);
+player.addEventListener("ended", stopDots);
+
 </script>
 
 </body>
