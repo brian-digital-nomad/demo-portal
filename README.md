@@ -1,6 +1,6 @@
-# Stemmen Portal – BrandingTotaal ©
+# Stemmen Portal – BroadcastTotaal & BrandingTotaal ©
 
-Dit is eenn platform voor het beluisteren van voice-over demo’s
+Dit is een testplatform voor het beluisteren van voice-over demo’s
 (mannen- en vrouwenstemmen)
 
 De portal is mobiel-vriendelijk en bedoeld als demo/preview voor klanten.
